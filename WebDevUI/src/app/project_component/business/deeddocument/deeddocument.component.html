@@ -1,0 +1,1351 @@
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="card-header pt-0 pb-0 pl-2 pr-0 clearfix"
+                    style="height: 30px; border: 1px solid #ccc; background-color: #138496;">
+                    <h4 class="myCustomTitle pt-1"><i style="font-size: 14px;" class="fa fa-table"></i> দলিল দস্তাবেজ
+                        {{cmnEntity.isShow?'তালিকা':''}}
+                    </h4>
+                    <common-button-top #cmnsrv (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                        [btnForm]="deedDocForm"></common-button-top>
+                </div>
+
+                <!-- Entry Form -->
+                <div *ngIf="!cmnEntity.isShow" class="col-md-12 pl-0 pr-0 pt-2 pb-0 m-0 table-primary">
+                    <form id="subForm" [formGroup]="deedDocForm" #f="ngForm" class="form-horizontal">
+                        <div class="row p-0 m-0">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="deedNo"
+                                        style="float: left;">দলিল নংঃ </label>
+                                    <div class="col-sm-8 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="deedNo" type="text" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="deedNo"
+                                                placeholder="দলিলের নং লিখুন" name="deedNo">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="categoryId"
+                                        style="float: left;">ব্যবহারিক শ্রেণীঃ </label>
+                                    <div class="col-sm-8 p-0 m-0 ml-2" style="float: left;">
+                                        <ng-select2 formControlName="categoryId" [options]="options" [allowClear]="true"
+                                            id="categoryId" name="categoryId"
+                                            (valueChanged)="getSubCatByCatId($event,true)" [data]="landCategoryList"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="thanaId"
+                                        style="float: left;">থানাঃ </label>
+                                    <div class="col-sm-8 p-0 m-0 ml-2" style="float: left;">
+                                        <ng-select2 #thanaState formControlName="thanaId" [options]="options"
+                                            [allowClear]="true" id="thanaId" name="thanaId"
+                                            (valueChanged)="getMouzaId($event)" [data]="thanaList"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="deedDate"
+                                        style="float: left;">দলিল তারিখঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="deedDate" type="date" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="deedDate"
+                                                placeholder="দলিলের তারিখ লিখুন" name="deedDate">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="landSubCategoryIds"
+                                        style="float: left;">উপ শ্রেণীঃ</label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <ng-select2 [(ngModel)]="landSubCategoryIds" [options]="optionMulti"
+                                            [ngModelOptions]="{standalone: true}" [allowClear]="true"
+                                            id="landSubCategoryIds" name="landSubCategoryIds"
+                                            [data]="landSubCategoryList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="registryOfficeId"
+                                        style="float: left;">রেজিষ্ট্রি অফিসঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <ng-select2 #regState formControlName="registryOfficeId" [options]="options"
+                                            [allowClear]="true" id="registryOfficeId" name="registryOfficeId"
+                                            [data]="registryOfficeList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="projectId"
+                                        style="float: left;">প্রকল্পঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <ng-select2 formControlName="projectId" [options]="options" [allowClear]="true"
+                                            id="projectId" name="projectId" [data]="landProjectList"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="districtId"
+                                        style="float: left;">জেলাঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <ng-select2 #distState formControlName="districtId" [options]="options"
+                                            [allowClear]="true" id="districtId" name="districtId"
+                                            (valueChanged)="getThanaAndRegOfficeById($event);" [data]="districtList"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="mouzaId"
+                                        style="float: left;">মৌজাঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <ng-select2 #mouzaState formControlName="mouzaId" [options]="options"
+                                            [allowClear]="true" id="mouzaId" name="mouzaId" [data]="mouzaList"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row p-0 m-0">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="deedNoVia"
+                                        style="float: left;">বায়া দলিলঃ </label>
+                                    <div class="col-sm-8 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="deedNoVia"
+                                                style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="deedNoVia"
+                                                placeholder="বায়া দলিল নং লিখুন" name="deedNoVia"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix mb-0">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1"
+                                        style="float: left; text-decoration: underline; font-weight: bold;">সার্ভের
+                                        নাম </label>
+                                    <label class="control-label col-sm-4 ml-2 p-0 m-0 pt-1"
+                                        style="float: left; text-align: center; text-decoration: underline; font-weight: bold;">খতিয়ান
+                                        নং </label>
+                                    <label class="control-label col-sm-4 ml-2 p-0 m-0 pt-1"
+                                        style="float: left; text-align: center; text-decoration: underline; font-weight: bold;">দাগ
+                                        নং </label>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="khatianCS"
+                                        style="float: left;">সি.এসঃ </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="khatianCS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="khatianCS"
+                                                placeholder="সি.এস খতিয়ান নং লিখুন" name="khatianCS"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="dagCS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="dagCS"
+                                                placeholder="সি.এস দাগ নং লিখুন" name="dagCS"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="khatianSA"
+                                        style="float: left;">এস.এঃ </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="khatianSA"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="khatianSA"
+                                                placeholder="এস.এ খতিয়ান নং লিখুন" name="khatianSA"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="dagSA"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="dagSA"
+                                                placeholder="এস.এ দাগ নং লিখুন" name="dagSA"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="khatianRS"
+                                        style="float: left;">আর.এসঃ </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="khatianRS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="khatianRS"
+                                                placeholder="আর.এস খতিয়ান নং লিখুন" name="khatianRS"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="dagRS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="dagRS"
+                                                placeholder="আর.এস দাগ নং লিখুন" name="dagRS"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="khatianDR"
+                                        style="float: left;">দিয়ারাঃ </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="khatianDR"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="khatianDR"
+                                                placeholder="দিয়ারা খতিয়ান নং লিখুন" name="khatianDR"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="dagDR"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="dagDR"
+                                                placeholder="দিয়ারা দাগ নং লিখুন" name="dagDR"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix mb-0">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1" for="khatianBS"
+                                        style="float: left;">বি.এস/সিটি জরীপঃ </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="khatianBS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="khatianBS"
+                                                placeholder="বি.এস/সিটি জরীপ খতিয়ান নং লিখুন"
+                                                name="khatianBS"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="dagBS"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="dagBS"
+                                                placeholder="বি.এস/সিটি জরীপ দাগ নং লিখুন" name="dagBS"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix mb-0">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0 pt-1"
+                                        style="float: left; text-decoration: underline; font-weight: bold;"></label>
+                                    <label class="control-label col-sm-4 ml-2 p-0 m-0 pt-1"
+                                        style="float: left; text-align: center; text-decoration: underline; font-weight: bold;">ল্যাটিচুড</label>
+                                    <label class="control-label col-sm-4 ml-2 p-0 m-0 pt-1"
+                                        style="float: left; text-align: center; text-decoration: underline; font-weight: bold;">লংগিচুড</label>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-2 ml-4 p-0 m-0" for="latitude"
+                                        style="float: left;">লোকেশনঃ
+                                        <i (click)="getLocation(deedDocForm,true);" class="text-danger fa fa-map-marker"
+                                            style="font-size: xx-large; cursor: pointer;"></i>
+                                    </label>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <input formControlName="latitude"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="latitude"
+                                                placeholder="ল্যাটিচুড লিখুন" name="latitude">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 p-0 m-0 ml-2" style="float: left;">
+                                        <div style="padding: 0px; width: 90%; font-size: 13px; float: left;">
+                                            <input formControlName="longitude"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="longitude"
+                                                placeholder="লংগিচুড লিখুন" name="longitude">
+                                            <!-- <button class="btn btn-sm pull-left" (click)="openGmap()"><i
+                                                    class="text-danger fa fa-map-marker"></i></button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="deedReceiver"
+                                        style="float: left;">দলিল গ্রহীতাঃ </label>
+                                    <div class="col-sm-6 p-0 m-0 mr-2" style="float: left;">
+                                        <div style="padding: 0px; width: 95%; font-size: 13px; float: left;">
+                                            <textarea formControlName="deedReceiver" type="text" style="height: auto;"
+                                                readonly cols="5" rows="1"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="deedReceiver" placeholder="দলিল গ্রহীতা নির্বাচন করুন"
+                                                name="deedReceiver"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 p-0 m-0 ml-1" style="float: left;">
+                                        <button class="btn btn-sm btn-info pull-left" (click)="getAllOwner();"><i
+                                                class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="caseNo"
+                                        style="float: left;">মামলা নং (যদি থাকে): </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <textarea rows="1" cols="5" formControlName="caseNo" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="caseNo"
+                                                placeholder="মামলা নং লিখুন" name="caseNo"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="totalLandInDag"
+                                        style="float: left;">মোট জমির পরিমান (অযুতাংশ): </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="totalLandInDag" type="text" style="height: auto;"
+                                                (blur)="getLandUnit('ttlLand', deedDocForm.controls.totalLandInDag.value)"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="totalLandInDag" placeholder="মোট জমির পরিমান (অযুতাংশ) লিখুন"
+                                                name="totalLandInDag">
+
+                                            <label class="control-label" style="float: left;">{{ttlLand}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="purchasedLand"
+                                        style="float: left;">ক্রয়কৃত জমির পরিমান (অযুতাংশ): </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="purchasedLand" type="text" style="height: auto;"
+                                                (blur)="getLandUnit('purLand', deedDocForm.controls.purchasedLand.value)"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="purchasedLand" placeholder="ক্রয়কৃত জমির পরিমান (অযুতাংশ) লিখুন"
+                                                name="purchasedLand">
+
+                                            <label class="control-label" style="float: left;">{{purLand}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="purchaseAmount"
+                                        style="float: left;">ক্রয়মূল্যঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="purchaseAmount" type="number" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="purchaseAmount" placeholder="ক্রয়মূল্য লিখুন" name="purchaseAmount">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="ldTaxAmount"
+                                        style="float: left;">খাজনার পরিমানঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="ldTaxAmount" type="number" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="ldTaxAmount" placeholder="খাজনার পরিমান লিখুন" name="ldTaxAmount">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="isPosted"
+                                        style="float: left;">স্ট্যাটাসঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div class="custom-control custom-checkbox">
+                                            <input formControlName="isPosted" type="checkbox" name="isPosted" checked
+                                                id="isPosted" class="custom-control-input">
+                                            <label class="custom-control-label bg-danger text-white"
+                                                style="font-weight: bold;" for="isPosted">পোষ্টেড?</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="isReportShowOnSubmit"
+                                        style="float: left;">রিপোর্টঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div class="custom-control custom-checkbox">
+                                            <input [(ngModel)]="isReportShowOnSubmit"
+                                                [ngModelOptions]="{standalone: true}" type="checkbox"
+                                                name="isReportShowOnSubmit" checked id="isReportShowOnSubmit"
+                                                class="custom-control-input">
+                                            <label class="custom-control-label" style="font-weight: bold;"
+                                                for="isReportShowOnSubmit">{{isReportShowOnSubmit?'দেখুন':'বন্ধ'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="deedSender"
+                                        style="float: left;">দলিল দাতাঃ </label>
+                                    <div class="col-sm-6 p-0 m-0 mr-2" style="float: left;">
+                                        <div style="padding: 0px; width: 95%; font-size: 13px; float: left;">
+                                            <textarea formControlName="deedSender" type="text" style="height: auto;"
+                                                readonly cols="5" rows="1"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="deedSender"
+                                                placeholder="দলিল দাতা নির্বাচন করুন" name="deedSender"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 p-0 m-0" style="float: left;">
+                                        <button class="btn btn-sm btn-info pull-left"
+                                            (click)="getAllSeller(0, 10, false, true);"><i
+                                                class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="mutationKhatianNo"
+                                        style="float: left;">নামজারী খতিয়ান নংঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="mutationKhatianNo" type="text" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="mutationKhatianNo" placeholder="নামজারী খতিয়ান নং লিখুন"
+                                                name="mutationKhatianNo">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="mutatedLand"
+                                        style="float: left;">নামজারীকৃত জমির পরিমান (অযুতাংশ): </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="mutatedLand" type="text" style="height: auto;"
+                                                (blur)="getLandUnit('mutLand', deedDocForm.controls.mutatedLand.value)"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="mutatedLand" placeholder="নামজারীকৃত জমির পরিমান (অযুতাংশ) লিখুন"
+                                                name="mutatedLand">
+
+                                            <label class="control-label" style="float: left;">{{mutLand}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="mutationJotNo"
+                                        style="float: left;">নামজারীকৃত জোত নংঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="mutationJotNo" type="text" style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="mutationJotNo" placeholder="নামজারীকৃত জমির জোত নং লিখুন"
+                                                name="mutationJotNo">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="notMutatedLand"
+                                        style="float: left;">নামজারীকৃত নয় জমির পরিমান (অযুতাংশ): </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="notMutatedLand" type="text" style="height: auto;"
+                                                (blur)="getLandUnit('nMutLand', deedDocForm.controls.notMutatedLand.value)"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="notMutatedLand"
+                                                placeholder="নামজারীকৃত নয় জমির পরিমান (অযুতাংশ) লিখুন"
+                                                name="notMutatedLand">
+
+                                            <label class="control-label" style="float: left;">{{nMutLand}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-4 ml-4 p-0 m-0 pt-1" for="remarks"
+                                        style="float: left;">মন্তব্যঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <textarea formControlName="remarks" rows="4" cols="5"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="remarks"
+                                                placeholder="মন্তব্য লিখুন" name="remarks"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <div *ngIf="!cmnEntity.isShow" class="col-12 p-0 m-0 card " style="border: 1px solid #ccc;">
+
+                    <div class="card-header p-2 clearfix"
+                        style="height: 20px; border: 1px solid #ccc; background-color: #138496;">
+                        <h4 style="color: #fff;font-size: 18px;font-weight: bold;"><i class="fa fa-upload"></i>
+                            নথিপত্র আপলোড</h4>
+
+                        <button class="btn btn-sm btn-danger pull-right mr-2"
+                            style="margin-top: -1.6%; border: 1px solid #fff;" (click)="openFormatterModaDialog();"><i
+                                class="fa fa-format"></i> ফরমেটার</button>
+
+                        <button class="btn btn-sm btn-info pull-right mr-2" *ngIf="loggedInfo.roleId==4"
+                            style="margin-top: -1.6%; border: 1px solid #fff;" (click)="getAllUserActivity(true);"><i
+                                class="fa fa-format"></i>
+                            কার্যবিবরনী</button>
+                        <!-- openFormatterModaDialog -->
+                    </div>
+
+                    <div class="card-body pl-2 pr-2 pt-2">
+
+                        <div class="col-12 m-0 p-0">
+
+                            <div class="form-group clearfix">
+                                <label class="control-label col-sm-1 p-0 m-0 pt-1" for="docTypeId"
+                                    style="float: left;">নথিপত্রের ধরনঃ </label>
+                                <div class="col-sm-2 p-0 m-0" style="float: left;">
+                                    <ng-select2 [(ngModel)]="docTypeId" [options]="options" [allowClear]="true"
+                                        id="docTypeId" name="docTypeId" [data]="uploadTypeList"
+                                        [placeholder]="'অনুগ্রহ করে ডকুমেন্ট টাইপ নির্বাচন করুন'">
+                                    </ng-select2>
+                                </div>
+
+                                <div class="col-sm-7 p-0 m-0" style="float: right;">
+                                    <button *ngIf="false" class="col-sm-2 btn btn-sm btn-danger pull-right"
+                                        (click)="docList=[];"><i class="fa fa-refresh"></i> রিসেট</button>
+                                    <button class="col-sm-3 btn btn-sm btn-primary pull-right mr-2"
+                                        (click)="addDocumnet()"
+                                        [disabled]="IsDocAddDisabled || (docTypeId==undefined || docTypeId=='' || docTypeId==null)"><i
+                                            class="fa fa-plus"></i> তালিকায় যোগ
+                                        করুন</button>
+
+                                    <div class="col-sm-4 p-0 m-0 mr-4" style="float: right;">
+                                        <input type="file" multiple="multiple" id="attachedFile"
+                                            (change)="onFileChange()" #fileInput>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 m-0 p-0">
+                            <div style="height: 185px; max-height: 185px; overflow: auto;">
+                                <table id="table" class="table table-striped table-sm table-bordered p-0">
+                                    <thead>
+                                        <tr class="gradiantBackground myCustomTableHeaderText">
+                                            <th style="cursor: pointer; text-align: left; width: 5%;">ক্রমিক নং.</th>
+                                            <th style="cursor: pointer; text-align: left; width: 10%;">নথিপত্রের ধরন
+                                            </th>
+                                            <th style="cursor: pointer; text-align: left; width: 25%;">প্রদর্শিত নাম
+                                            </th>
+                                            <th style="cursor: pointer; text-align: left; width: 10%;">নথিপত্রের নাম
+                                            </th>
+                                            <th style="cursor: pointer; text-align: left; width: 10%;">নথিপত্রের নং
+                                            </th>
+                                            <th style="cursor: pointer; text-align: left; width: 10%;">অন্যান্য</th>
+                                            <th style="cursor: pointer; text-align: left; width: 20%;">মন্তব্য</th>
+                                            <th style="cursor: pointer; text-align: center; width: 10%;">অপশন</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody style="padding-bottom: 0px; margin-bottom: 0px;">
+                                        <tr *ngFor="let item of docList; let sl=index" style="cursor: pointer;">
+                                            <td style="text-align: left">{{sl+1}}</td>
+                                            <td style="text-align: left;">{{item.inputType}}</td>
+                                            <td style="text-align: left; text-decoration: underline; color: blue;"
+                                                (click)="_conversion.viewDocument(item.virtualPath)"
+                                                *ngIf="item.documentId==0">
+                                                <span *ngIf="item.inputName==null || item.inputName==''">
+                                                    {{item.documentName}}</span>
+                                                <span *ngIf="item.inputName!=null && item.inputName!=''">
+                                                    {{item.inputName}}</span>
+                                            </td>
+                                            <td style="text-align: left; text-decoration: underline; color: blue;"
+                                                *ngIf="item.documentId>0" (click)="viewDocument(item)">
+                                                <span *ngIf="item.inputName==null || item.inputName==''">
+                                                    {{item.documentName}}</span>
+                                                <span *ngIf="item.inputName!=null && item.inputName!=''">
+                                                    {{item.inputName}}</span>
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <input type="text"
+                                                    style="width: 98%; text-align: left; border: 1px solid #c9c9c9; margin-top: 8px;"
+                                                    id="inputName_{{sl}}_{{item.documentId}}"
+                                                    name="inputName_{{sl}}_{{item.documentId}}"
+                                                    [(ngModel)]="item.inputName">
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <input type="text"
+                                                    style="width: 98%; text-align: center; border: 1px solid #c9c9c9; margin-top: 8px;"
+                                                    id="inputNo_{{sl}}_{{item.documentId}}"
+                                                    name="inputNo_{{sl}}_{{item.documentId}}"
+                                                    [(ngModel)]="item.inputNumber">
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <input type="text"
+                                                    style="width: 98%; text-align: left; border: 1px solid #c9c9c9; margin-top: 8px;"
+                                                    id="inputOthers_{{sl}}_{{item.documentId}}"
+                                                    name="inputOthers_{{sl}}_{{item.documentId}}"
+                                                    [(ngModel)]="item.inputOthers">
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <textarea cols="5" rows="1"
+                                                    style="width: 98%; text-align: left; border: 1px solid #c9c9c9; margin-top: 8px;"
+                                                    id="remarks_{{sl}}_{{item.documentId}}"
+                                                    name="remarks_{{sl}}_{{item.documentId}}"
+                                                    [(ngModel)]="item.remarks"></textarea>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <!-- <span type="button" class="btn btn-sm" *ngIf="item.documentFullPath!='' "
+                                                    style="padding-bottom: 3px; margin-right: 2px; z-index:0;"
+                                                    (click)="viewDocument(item)"><i
+                                                        class="text-info fa fa-eye"></i></span> -->
+
+                                                <span type="button" class="btn btn-sm"
+                                                    *ngIf="item.documentId>0 && !cmnEntity.isDelete"
+                                                    style="padding-bottom: 3px; margin-right: 2px; z-index:0;"><i
+                                                        class="text-info fa fa-check"></i></span>
+                                                <span type="button" class="btn btn-sm"
+                                                    *ngIf="item.documentId==0 || cmnEntity.isDelete"
+                                                    style="padding-bottom: 3px; margin-right: 2px; z-index:0;"
+                                                    (click)="delectDocument(sl, item)"><i
+                                                        class="text-danger fa fa-{{item.isCancel==true?'times':'trash-o'}}"></i></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- List-->
+            <div *ngIf="cmnEntity.isShow" class="card-body pl-0 pr-4 pt-2"
+                style="min-height: 460px; margin-bottom: -20px;">
+
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="districtsId"
+                                style="float: left;">জেলাঃ </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="districtsId" [options]="options" [allowClear]="true"
+                                    id="districtsId" name="districtsId" (valueChanged)="getThanasById($event)"
+                                    [data]="districtsList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="thanasId"
+                                style="float: left;">থানাঃ </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="thanasId" [options]="options" [allowClear]="true" id="thanasId"
+                                    (valueChanged)="getMouzasById($event)" name="thanasId" [data]="thanasList"
+                                    [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="mouzasId"
+                                style="float: left;">মৌজাঃ </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="mouzasId" [options]="options" [allowClear]="true" id="mouzasId"
+                                    name="mouzasId" [data]="mouzasList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="postedId"
+                                style="float: left;">স্ট্যাটাসঃ </label>
+                            <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="postedId" [options]="options" [allowClear]="true" id="postedId"
+                                    name="postedId" [data]="postingList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+
+                            <button class="btn btn-success btn-sm pull-right"
+                                (click)="getListByPages(pageSize)">দেখাও</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <pager-top #cmnpagerTop (setPage)="getListByPage($event)" (sendList)="deedList=$event"
+                            [pageSize]="pageSize" [searchVal]="searchVal" [strId]="districtsId" [strId2]="thanasId"
+                            [strId3]="mouzasId" [strId4]="postedId" [IsSearchOnServer]="true"
+                            [responseTag]="responseTag" [apiUrl]="_listByPageUrl">
+                        </pager-top>
+                    </div>
+                </div>
+
+                <div class="row pr-2">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style="height:653px; overflow:auto;">
+                            <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                *ngIf="this.isLoaded">
+                                <thead class="table-dark"
+                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                    <tr class="myCustomTableHeaderText">
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            দলিল নং</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            দলিলের তারিখ</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            জেলা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            থানা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মৌজা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            স্ট্যাটাস</th>
+                                        <th *ngIf="loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            ইনপুট করেছেন</th>
+                                        <th *ngIf="loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            পরিবর্তন করেছেন</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%;">
+                                            এ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                    <tr *ngFor="let item of this.deedList;let sl = index">
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.deedNo}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.deedDate | date:'dd-MMM-yy'}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.districtName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.thanaName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.mouzaName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <h6><span
+                                                    class="badge badge-pill badge-{{item.isPosted=='1'?'success':'danger'}}">{{item.isPosted=='1'?'পোষ্টেড':'আনপোষ্টেড'}}</span>
+                                            </h6>
+                                        </td>
+                                        <td *ngIf="loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                            class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.entryUser}}
+                                        </td>
+                                        <td *ngIf="loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                            class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.updateUser}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <!-- <span type="button" class="btn btn-sm" (click)="loadReportOut(item.deedId);"
+                                                style="padding-bottom: 3px; margin-right: 2px; float: left;"><i
+                                                    class="text-danger fa fa-file-pdf-o"></i></span> -->
+
+
+                                            <a mat-button [matMenuTriggerFor]="actionMenu" aria-label="hidden"
+                                                style="z-index: 0">
+                                                <mat-icon>arrow_drop_down</mat-icon>
+                                                <!-- <span>Action</span>
+                                                    <mat-icon>arrow_drop_down</mat-icon> -->
+                                            </a>
+                                            <mat-menu #actionMenu="matMenu">
+                                                <button mat-menu-item class="btn btn-sm mr-2"
+                                                    title="Click to load report" style="z-index: 0;"
+                                                    (click)="loadReportOut(item.deedId)" *ngIf="cmnEntity.isView">
+                                                    <mat-icon class="text-danger"><i
+                                                            class="fa fa-file-pdf-o"></i></mat-icon>
+                                                    <span>রিপোর্ট</span>
+                                                </button>
+                                                <!-- 3-View -->
+                                                <button mat-menu-item class="btn btn-sm mr-2"
+                                                    title="Click to view record" style="z-index: 0;"
+                                                    (click)="edit(item); cmnEntity.isEdit=false; cmnEntity.isViewOnly=true; cmnEntity.isShow=false;"
+                                                    *ngIf="cmnEntity.isView">
+                                                    <mat-icon class="text-info"><i class="fa fa-eye"></i></mat-icon>
+                                                    <span>দেখুন</span>
+                                                </button>
+                                                <!-- 4-Edit -->
+                                                <button mat-menu-item class="btn btn-sm mr-2"
+                                                    title="Click to edit record" style="z-index: 0;"
+                                                    (click)="edit(item); cmnEntity.isEdit=true; cmnEntity.isViewOnly=false; cmnEntity.isShow=false;"
+                                                    *ngIf="cmnEntity.isUpdate && (item.isPosted=='0' || loggedInfo.roleId=='1' || loggedInfo.roleId=='2')">
+                                                    <mat-icon class="text-warning"><i class="fa fa-edit"></i></mat-icon>
+                                                    <span>পরিবর্তন করুন</span>
+                                                </button>
+                                                <!-- 5-Delete -->
+                                                <button mat-menu-item class="btn btn-sm mr-2"
+                                                    title="Click to delete record" style="z-index: 0;"
+                                                    (click)="openModal(item,5); cmnEntity.isEdit=false; cmnEntity.isViewOnly=false"
+                                                    *ngIf="cmnEntity.isDelete">
+                                                    <mat-icon class="text-danger"><i
+                                                            class="fa fa-trash-o"></i></mat-icon>
+                                                    <span>মুছুন</span>
+                                                </button>
+
+                                                <button mat-menu-item class="btn btn-sm mr-2"
+                                                    title="Click to set location" style="z-index: 0;"
+                                                    (click)="getDeedForLocation(item)" *ngIf="cmnEntity.isUpdate">
+                                                    <mat-icon
+                                                        [style.color]="!item.latitude || !item.longitude ? 'red' : 'green'"><i
+                                                            class="fa fa-map-marker"></i></mat-icon>
+                                                    <span> লোকেশন সেট করুন</span>
+                                                </button>
+                                            </mat-menu>
+
+
+                                            <!-- <common-button-option #cmnbuttonoption style="float: left;"
+                                                *ngIf="item.isPosted=='0' || loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                                (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                                                [model]="item" [itemName]="item.deedNo"></common-button-option> -->
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pr-2">
+                    <div class="col-md-12">
+                        <pager-bottom #cmnpager (setPage)="getListByPage($event)" (sendList)="deedList=$event"
+                            [searchVal]="searchVal" [strId]="districtsId" [strId2]="thanasId" [strId3]="mouzasId"
+                            [strId4]="postedId" [cmnEntity]="cmnEntity" [pageSize]="pageSize"
+                            [responseTag]="responseTag" [apiUrl]="_listByPageUrl"></pager-bottom>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deed Receiver Modal -->
+<ng-template #modalReceiver style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">দলিল গ্রহীতাদের তালিকা</h2>
+        <div class="pull-right" style="margin-top: -7%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset class="mt-4">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                    <div style="overflow-x:auto; max-height: 300px; height: auto;">
+                        <table id="table" class="table table-striped table-sm table-bordered p-0">
+                            <thead style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                <tr class="gradiantBackground banglaTitle myCustomTableHeaderText">
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 5%; font-size: initial;">
+                                        ক্রমিক নং</th>
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%;">
+                                        <span class="material-icons" type="button"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;"
+                                            (click)="isAllChecked=isAllChecked?false:true;addAllRcvrToList()">
+                                            {{isAllChecked?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </th>
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 35%; font-size: initial;">
+                                        নাম</th>
+                                    <!-- <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 85%;">
+                                        Name</th> -->
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 40%; font-size: initial;">
+                                        ঠিকানা</th>
+                                    <!-- <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 85%;">
+                                        Address</th> -->
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%; font-size: initial;">
+                                        গং?
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                <tr *ngFor="let item of ownerList;let sl = index">
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 5%; text-align: center;">
+                                        {{sl+1}}
+                                    </td>
+                                    <td
+                                        style="position:sticky; top:-1.5px; z-index:0; cursor: pointer; text-align: center; width: 10%;">
+                                        <span class="material-icons" type="button"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;"
+                                            (click)="addRcvrToList(item, sl)">
+                                            {{item.isChecked?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </td>
+
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 35%; text-align: left;">
+                                        {{item.nameBn}}
+                                    </td>
+                                    <!-- <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 85%; text-align: left;">
+                                        {{item.nameEn}}
+                                    </td> -->
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 40%; text-align: left;">
+                                        {{item.addressBn}}
+                                    </td>
+                                    <!-- <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 85%; text-align: left;">
+                                        {{item.addressEn}}
+                                    </td> -->
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 10%; text-align: center;">
+                                        <span class="material-icons" type="button" (click)="setRcvrGong(item)"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;">
+                                            {{item.isGong?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="submit" mat-raised-button matDialogClose color="primary"
+            style="background: green; color:white;">Done</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Deed Receiver Modal -->
+
+<!-- Deed Sender Modal -->
+<ng-template #modalSender style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">দলিল দাতাদের তালিকা</h2>
+        <div class="pull-right" style="margin-top: -7%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset class="mt-4">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0">
+                    <input [(ngModel)]="sellerName" type="text" style="height: auto; width: 730px; margin-bottom: 5px;"
+                        (keyup)="filterOnSide($event)" class="form-control form-control-sm input-sm input-sm-*"
+                        id="sellerName" placeholder="দলিল দাতার নাম লিখুন" name="sellerName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                    <div #scrollMe [scrollTop]="scrolltop" (scroll)="onScroll($event)"
+                        style="overflow-y:auto; max-height: 300px; height: auto;">
+                        <table id="table" class="table table-striped table-sm table-bordered p-0">
+                            <thead style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                <tr class="gradiantBackground banglaTitle myCustomTableHeaderText">
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 5%; font-size: initial;">
+                                        ক্রমিক নং</th>
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%;">
+                                        <span class="material-icons" type="button"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;"
+                                            (click)="isSndrAllChecked=isSndrAllChecked?false:true;addAllSndrToList()">
+                                            {{isSndrAllChecked?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </th>
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 25%; font-size: initial;">
+                                        নাম</th>
+
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 25%; font-size: initial;">
+                                        পিতা</th>
+                                    <!-- <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 85%;">
+                                        Name</th> -->
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 25%; font-size: initial;">
+                                        ঠিকানা</th>
+                                    <!-- <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 85%;">
+                                        Address</th> -->
+                                    <th
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%; font-size: initial;">
+                                        গং?
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                <tr *ngFor="let item of sellerList;let sl = index">
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 5%; text-align: center;">
+                                        {{sl+1}}
+                                    </td>
+                                    <td
+                                        style="position:sticky; top:-1.5px; z-index:0; cursor: pointer; text-align: center; width: 10%;">
+                                        <span class="material-icons" type="button"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;"
+                                            (click)="addSndrToList(item, sl)">
+                                            {{item.isChecked?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </td>
+
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 25%; text-align: left;">
+                                        {{item.nameBn}}
+                                    </td>
+
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 25%; text-align: left;">
+                                        {{item.fatherName}}
+                                    </td>
+                                    <!-- <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 85%; text-align: left;">
+                                        {{item.nameEn}}
+                                    </td> -->
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 25%; text-align: left;">
+                                        {{item.addressBn}}
+                                    </td>
+                                    <!-- <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 85%; text-align: left;">
+                                        {{item.addressEn}}
+                                    </td> -->
+                                    <td class="pl-2 pr-1 pt-1 pb-1 height-sm" style="width: 10%; text-align: center;">
+                                        <span class="material-icons" type="button" (click)="setSndrGong(item)"
+                                            style="padding-bottom: 3px; margin-right: 2px; color: #138496;">
+                                            {{item.isGong?'radio_button_checked':'radio_button_unchecked'}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="submit" mat-raised-button color="warning" (click)="loadSellerAll()"
+            [disabled]="sellerList.length==sellerList[0].ttlRow?true:false"
+            style="background: rgb(159 159 159); color:white;">Load All</button>
+        <button type="submit" mat-raised-button matDialogClose color="primary"
+            style="background: green; color:white;">Done</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Deed Sender Modal -->
+
+<!-- Format Modal -->
+<ng-template #modalFormatter style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">ফরমেটার</h2>
+        <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset class="mt-4">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                    <div style="overflow:auto; height: 350vh;">
+                        <div style="padding: 0px; width: 98%; font-size: 13px; float: left;">
+                            <textarea rows="20" cols="10" [(ngModel)]="strFormatter"
+                                class="form-control form-control-sm input-sm input-sm-*" id="strFormatter"
+                                placeholder="আপনার কপি করা টেক্সট/ইনপুটেট টেক্সট পেস্ট করে ফরমেট বাটনে প্রেস করুন"
+                                name="strFormatter"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="button" mat-raised-button color="primary"
+            (click)="strFormatter=_conversion.removeSpChars(strFormatter)"
+            style="background: green; color:white;">ফরমেট</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Format Modal -->
+
+<!-- Activity Modal -->
+<ng-template #modalSelfActivity style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">নিজ কার্যবিবরনী</h2>
+        <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset class="mt-4">
+            <div class="row">
+                <div class="clearfix col-md-3"></div>
+                <div class="col-md-2">
+                    <div class="form-group clearfix">
+                        <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="today" style="float: left;">তারিখঃ
+                        </label>
+                        <div class="col-sm-9 p-0 m-0 ml-1" style="float: left;">
+                            <input [(ngModel)]="today" type="date" style="height: auto;"
+                                class="form-control form-control-sm input-sm input-sm-*" id="today"
+                                placeholder="তারিখ লিখুন" name="today">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-sm btn-warning pull-right mr-2" (click)="getAllUserActivity(false)"><i
+                            class="fa fa-refresh"> রিফ্রেশ</i></button>
+                </div>
+
+                <div class="clearfix col-md-5"></div>
+
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0">
+                <div fxLayout="row wrap">
+                    <div *ngFor="let item of listUserActivity;let sl = index" fxFlex="100" fxFlex.xl="100"
+                        fxFlex.lg="100" fxFlex.md="100" fxFlex.sm="100" fxLayoutAlign="start center" class="p-2">
+                        <mat-card fxLayout="row" fxLayoutAlign="start center"
+                            style="cursor: pointer; background: #e5e5e5; font-family: cursive; border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                            class="p-1 gradient-indigo team-member h-100 w-50">
+
+                            <div fxLayout="column" fxLayoutAlign="center center" class="user-block w-100 h-100"
+                                [class.py-3]="settings.menuType != 'mini'" [class.py-2]="settings.menuType == 'mini'">
+                                <img [src]="item.photo || './assets/img/users/default-user.jpg'">
+                                <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">{{item.entryBy}}</h2>
+                            </div>
+                        </mat-card>
+                        <mat-card fxLayout="row" fxLayoutAlign="start center"
+                            style="cursor: pointer; background: #e5e5e5; font-family: cursive; border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                            class="p-1 gradient-indigo team-member h-100 w-100">
+
+                            <div fxLayout="column" fxLayoutAlign="center center" class="w-100">
+                                <h5 class="pb-2">Todays Entry: {{item.todaysEntry}}</h5>
+                                <h5 class="pb-2" *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Todays Upload:
+                                    {{item.todaysDocUp}}</h5>
+                                <hr style="border: 1px dashed #fff; width: 50%; padding: 0; margin: 5px;">
+                                <h5 class="pb-2">Total Entry: {{item.totalEntry}}</h5>
+                                <h5 *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Total Upload:
+                                    {{item.totalDocUp}}</h5>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="button" mat-raised-button color="primary" matDialogClose>বন্ধ</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Activity Modal -->
+
+<!-- Set Location Modal -->
+<ng-template #modalSetLocation style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0" style="font-weight: bold;">লোকেশন আপডেট (দলিল নংঃ
+            {{deedLockForm.deedNo}})</h2>
+        <!-- <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div> -->
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset>
+            <div class="row pr-2">
+                <div class="col-md-12">
+                    <div class="table-responsive" style="height:350px; overflow:auto;">
+                        <table id="table" class="table table-striped table-sm table-bordered p-0" *ngIf="this.isLoaded">
+                            <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="font-weight: bold; text-align: left;"
+                                        colspan="5">
+                                        দলিলের ঠিকানাঃ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        তারিখঃ {{deedLockForm.deedDate | date:'dd-MMM-yy'}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        জেলাঃ {{deedLockForm.districtName}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        থানাঃ {{deedLockForm.thanaName}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        মৌজাঃ {{deedLockForm.mouzaName}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        অবস্থানঃ {{deedLockForm.latitude}}-{{deedLockForm.longitude}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="font-weight: bold; text-align: left;"
+                                        colspan="5">
+                                        খতিয়ান সমুহঃ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        সি.এসঃ {{deedLockForm.khatianCS}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        এস.এঃ {{deedLockForm.khatianSA}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        আর.এসঃ {{deedLockForm.khatianRS}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        দিয়ারাঃ {{deedLockForm.khatianDR}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        বি.এসঃ {{deedLockForm.khatianBS}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="font-weight: bold; text-align: left;"
+                                        colspan="5">
+                                        দাগ সমুহঃ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        সি.এসঃ {{deedLockForm.dagCS}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        এস.এঃ {{deedLockForm.dagSA}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        আর.এসঃ {{deedLockForm.dagRS}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        দিয়ারাঃ {{deedLockForm.dagDR}}
+                                    </td>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: left; width: 20%;">
+                                        বি.এসঃ {{deedLockForm.dagBS}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" colspan="5"
+                                        style="text-align: left; width: 20%; background-color: limegreen; font-weight: bold;">
+                                        {{deedLockForm.latitude}}-{{deedLockForm.longitude}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 pr-1 pt-1 pb-1" colspan="5">
+                                        <button type="button" mat-raised-button color="primary"
+                                            (click)="getLocation(deedLockForm,false)"
+                                            style="background: green; color:white; float: left;"><i
+                                                class="text-danger fa fa-map-marker" style="font-size: xxx-large;"></i>
+                                            সেট
+                                            লোকেশন</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="button" [disabled]="!deedLockForm.latitude || !deedLockForm.longitude" mat-raised-button
+            color="primary" (click)="onSubmitLocation()" style="background: green; color:white;">আপডেট করুন</button>
+        <button type="button" mat-raised-button color="primary" matDialogClose>বন্ধ</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Activity Modal -->
+
+<!-- Report Modal -->
+<ng-template #modalReport style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">দলিল</h2>
+        <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset class="mt-4">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                    <div style="overflow:auto; height: 350vh;">
+                        <reportviewer></reportviewer>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+</ng-template>
+<!-- Report Modal -->
+<reportviewer *ngIf="!isIn"></reportviewer>
+
+<!-- Googl Map Modal -->
+<!-- <ng-template #modalGMap style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">Google Map</h2>
+        <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0">
+                    <div id="gapiloc"></div>
+                    <div id="googleMap" style="width:100%;height:500px;"></div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="submit" mat-raised-button matDialogClose color="primary"
+            style="background: green; color:white;">Close</button>
+    </mat-dialog-actions>
+</ng-template> -->
+<!-- Googl Map Modal -->

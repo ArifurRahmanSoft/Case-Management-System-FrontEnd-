@@ -1,0 +1,24 @@
+<!-- Googl Map Modal -->
+<ng-template #modalGmap style="overflow: hidden; margin-top: -20%;" role="dialog">
+    <div class="mat-dialog-header border-bottom">
+        <h2 class="pull-left" mat-dialog-title class="mb-0">Google Map</h2>
+        <div class="pull-right" style="margin-top: -4%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content style="overflow: hidden;">
+        <fieldset>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0">
+                    <div id="_gapiloc"></div>
+                </div>
+            </div>
+        </fieldset>
+    </mat-dialog-content>
+    <mat-dialog-actions class="border-top mt-4" style="overflow:hidden;" align="end">
+        <button type="submit" mat-raised-button matDialogClose color="primary">Close</button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Googl Map Modal -->

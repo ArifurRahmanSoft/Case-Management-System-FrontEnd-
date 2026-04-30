@@ -1,0 +1,156 @@
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="col-md-12 card-header"
+                    style="border: 1px solid #ccc; background-color: #138496; text-align: center; color: #fff;">
+                    <h1><mat-icon>dashboard</mat-icon> Entry User Activity</h1>
+                </div>
+                <br>
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="entryMenuId"
+                                style="float: left;">মেনুঃ: </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="entryMenuId" [options]="options" [allowClear]="true"
+                                    id="entryMenuId" name="entryMenuId" (valueChanged)="getOperatorById($event)"
+                                    [data]="entryMenuList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="entryOperatorId"
+                                style="float: left;">অপারেটরঃ </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="entryOperatorId" [options]="options" [allowClear]="true"
+                                    id="entryOperatorId" name="entryOperatorId" [data]="entryOperatorList"
+                                    [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="today"
+                                style="float: left;">তারিখঃ </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <input [(ngModel)]="today" type="date" style="height: auto;"
+                                    class="form-control form-control-sm input-sm input-sm-*" id="today"
+                                    placeholder="তারিখ লিখুন" name="today">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="col-sm-3 btn btn-sm btn-warning pull-right mr-2"
+                            (click)="getAllUserActivity()"><i class="fa fa-refresh"> রিফ্রেশ</i></button>
+                    </div>
+
+                </div>
+
+                <div class="col-12 pl-0 pr-0 pt-2 pb-0 m-0">
+                    <div fxLayout="row wrap">
+                        <div *ngFor="let item of listUserActivity;let sl = index" fxFlex="100" fxFlex.xl="25"
+                            fxFlex.lg="25" fxFlex.md="50" fxFlex.sm="50" class="p-2">
+                            <mat-card fxLayout="row" fxLayoutAlign="start center"
+                                style="cursor: pointer; background: #e5e5e5;"
+                                class="p-1 gradient-{{item.bgColor}} team-member h-100">
+
+                                <div fxLayout="column" fxLayoutAlign="center center" class="user-block w-100 h-100"
+                                    [class.py-3]="settings.menuType != 'mini'"
+                                    [class.py-2]="settings.menuType == 'mini'">
+                                    <img [src]="item.photo || './assets/img/users/default-user.jpg'">
+                                    <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">{{item.entryBy}}</h2>
+                                </div>
+                                
+                                <div fxLayout="column" fxLayoutAlign="center center" class="w-100">
+                                    <h5 class="pb-2">Todays Entry: {{item.todaysEntry}}</h5>
+                                    <h5 class="pb-2" *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Todays Upload: {{item.todaysDocUp}}</h5>
+                                    <h5 class="pb-2">Total Entry: {{item.totalEntry}}</h5>
+                                    <h5 *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Total Upload: {{item.totalDocUp}}</h5>
+                                </div>
+                            </mat-card>
+                        </div>                        
+                    </div>
+
+                    <div fxLayout="row wrap">
+                        <div fxFlex="100" fxFlex.xl="33.3"
+                            fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="50" class="p-2">
+                            <mat-card fxLayout="row" fxLayoutAlign="start center"
+                                style="cursor: pointer; background: #e5e5e5;"
+                                class="p-1 gradient-{{itBgColor}} team-member h-100">
+
+                                <div fxLayout="column" fxLayoutAlign="center center" class="user-block w-100 h-100"
+                                    [class.py-3]="settings.menuType != 'mini'"
+                                    [class.py-2]="settings.menuType == 'mini'">
+                                    <img [src]="'./assets/img/app/3.jpg'">
+                                    <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">IT Department</h2>
+                                </div>
+                                
+                                <div fxLayout="column" fxLayoutAlign="center center" class="w-100">
+                                    <h5 class="pb-2">Todays Entry: {{itTodayEntry}}</h5>
+                                    <h5 class="pb-2" *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Todays Upload: {{itTodayDocUp}}</h5>
+                                    <h5 class="pb-2">Total Entry: {{itTotalEntry}}</h5>
+                                    <h5 *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Total Upload: {{itTotalDocUp}}</h5>
+                                </div>
+                            </mat-card>
+                        </div>
+                        
+                        <div fxFlex="100" fxFlex.xl="33.3"
+                            fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="50" class="p-2">
+                            <mat-card fxLayout="row" fxLayoutAlign="start center"
+                                style="cursor: pointer; background: #e5e5e5;"
+                                class="p-1 gradient-{{landBgColor}} team-member h-100">
+
+                                <div fxLayout="column" fxLayoutAlign="center center" class="user-block w-100 h-100"
+                                    [class.py-3]="settings.menuType != 'mini'"
+                                    [class.py-2]="settings.menuType == 'mini'">
+                                    <img [src]="'./assets/img/app/lms1.png'">
+                                    <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">Land Department</h2>
+                                </div>
+                                
+                                <div fxLayout="column" fxLayoutAlign="center center" class="w-100">
+                                    <h5 class="pb-2">Todays Entry: {{landTodayEntry}}</h5>
+                                    <h5 class="pb-2" *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Todays Upload: {{landTodayDocUp}}</h5>
+                                    <h5 class="pb-2">Total Entry: {{landTotalEntry}}</h5>
+                                    <h5 *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Total Upload: {{landTotalDocUp}}</h5>
+                                </div>
+                            </mat-card>
+                        </div>
+                        
+                        <div fxFlex="100" fxFlex.xl="33.3"
+                            fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="50" class="p-2">
+                            <mat-card fxLayout="row" fxLayoutAlign="start center"
+                                style="cursor: pointer; background: #e5e5e5;"
+                                class="p-1 gradient-{{ttlBgColor}} team-member h-100">
+
+                                <div fxLayout="column" fxLayoutAlign="center center" class="user-block w-100 h-100"
+                                    [class.py-3]="settings.menuType != 'mini'"
+                                    [class.py-2]="settings.menuType == 'mini'">
+                                    <img [src]="'./assets/img/app/lms2.png'">
+                                    <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">Total</h2>
+                                </div>
+                                
+                                <div fxLayout="column" fxLayoutAlign="center center" class="w-100">
+                                    <h5 class="pb-2">Todays Entry: {{todaysEntryCount}}</h5>
+                                    <h5 class="pb-2" *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Todays Upload: {{todaysDocUpCount}}</h5>
+                                    <h5 class="pb-2">Total Entry: {{allEntryCount}}</h5>
+                                    <h5 *ngIf="entryMenuId==null || entryMenuId=='T_LAND_DEED'">Total Upload: {{allDocUpCount}}</h5>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

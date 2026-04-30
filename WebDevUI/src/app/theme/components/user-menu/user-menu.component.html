@@ -1,0 +1,48 @@
+<button mat-icon-button [matMenuTriggerFor]="userMenu" #userMenuTrigger="matMenuTrigger" >
+    <mat-icon>account_circle</mat-icon>
+</button>
+
+<mat-menu #userMenu="matMenu" [overlapTrigger]="false" class="toolbar-dropdown-menu user-menu">
+    <!--<span (mouseleave)="userMenuTrigger.closeMenu()">-->        
+        <mat-card fxLayout="row" fxLayoutAlign="space-around center" class="user-info p-0">
+            <img [src]="employeePhoto || './assets/img/users/default-user.jpg'" >
+            <div fxLayout="column" fxLayoutAlign="center center">
+                <h2>{{exployeeName}}</h2>
+                <h3 class="secondary-text-color">{{employeeDesignation}}</h3>
+                <!-- <p class="secondary-text-color">{{employeeEmail}}</p> -->
+            </div>
+        </mat-card>  
+        <mat-divider></mat-divider>
+
+        <!-- <a mat-menu-item routerLink="/profile/projects"> 
+            <mat-icon>person</mat-icon>
+            <span>Profile</span> 
+        </a> -->
+
+        <a mat-menu-item routerLink="/updatePassword"> 
+            <mat-icon>edit</mat-icon>
+            <span>পাসওয়ার্ড পরিবর্তন করুন</span> 
+        </a>
+
+        <!-- <a mat-menu-item routerLink="settings"> 
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span> 
+        </a> -->
+
+        <!-- <a mat-menu-item routerLink="/"> 
+            <mat-icon>lock</mat-icon>
+            <span>Lock screen</span> 
+        </a> -->
+
+        <!-- <a mat-menu-item routerLink="help"> 
+            <mat-icon>help</mat-icon>
+            <span>Help</span> 
+        </a> -->
+
+        <mat-divider></mat-divider>
+        <a mat-menu-item  (click) = "logout()"> 
+            <mat-icon>power_settings_new</mat-icon>
+            <span>লগ আউট</span> 
+        </a>
+    <!--</span>-->
+</mat-menu>

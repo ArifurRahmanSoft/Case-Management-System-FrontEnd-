@@ -1,0 +1,177 @@
+
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="col-md-12 card-header"
+                    style="border: 1px solid #ccc; background-color: #3B82F6; text-align: center; color: #fff;">
+                    <h5><mat-icon>dashboard</mat-icon>কেস ম্যানেজমেন্ট ড্যাশবোর্ড </h5>
+                </div>
+                <br>
+
+
+                <!-- dashboard.component.html -->
+                <div class="row g-3 ml-1">
+                    <div style="text-align: center; height: 80px;"
+                        class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg ml-1 p-3 mr-5 mb-5 bg-body-tertiary rounded">
+                        <div class="dashboard-card">
+                            <h3>{{ totalActiveCase }}</h3>
+                            <p>চলমান মামলা</p>
+                        </div>
+                    </div>
+
+
+                    <div style="color: red;"
+                        class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg p-3 mr-5 mb-5 bg-body-tertiary rounded">
+                        <div class="dashboard-card">
+                            <h3>{{ caseurgentPriorty }}</h3>
+                            <p>উচ্চ ঝুঁকির মামলা</p>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg p-3 mr-5 mb-5 bg-body-tertiary rounded">
+                        <div class="dashboard-card">
+                            <h3>{{ totalCompany }}</h3>
+                            <p>মামলাযুক্ত কোম্পানির সংখ্যা</p>
+                        </div>
+                    </div>
+
+                     <div
+                        class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg p-3 mr-5 mb-5 bg-body-tertiary rounded">
+                        <div class="dashboard-card">
+                            <h3>{{ totalResolvedCase }}</h3>
+                            <p>স্থগিত মামলা</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="dashboard">
+                    <div class="card"
+                        style="border:none; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow-x:auto; max-height:310px; overflow-y:auto;">
+
+                        <!-- 🔹 Header -->
+                        <div style="background:linear-gradient(90deg,#4e73df,#224abe);
+              color:#fff;
+              padding:12px 15px;
+              font-size:16px;
+              font-weight:600;">
+                            📋 পরবর্তী শুনানির লিস্ট
+                        </div>
+
+                        <!-- 🔹 Table -->
+                        <div style="padding:10px; overflow-x:auto;">
+
+                            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+
+                                <!-- Header -->
+                                <thead>
+                                    <tr style="border: 1px solid blueviolet; background-color:#eef2ff;">
+                                        <th style="padding:10px; border:1px solid #ddd; text-align:left;">মামলা নং</th>
+                                        <th style="padding:10px; border:1px solid #ddd; text-align:left;">সুনানির তারিখ
+                                        </th>
+                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">কোর্ট</th>
+                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">থানা</th>
+                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">মৌজা</th>
+                                        
+                                    </tr>
+                                </thead>
+
+                                <!-- Body -->
+                                <tbody>
+
+                                    <tr *ngFor="let hr of caserecentHearingList; let i = index"
+                                        [ngStyle]="{'background-color': i % 2 === 0 ? '#ffffff' : '#f8f9fc'}"
+                                        style="transition:0.2s;" onmouseover="this.style.background='#eaf1ff'"
+                                        onmouseout="this.style.background=''">
+
+                                        <td style="padding:10px; border:1px solid #eee; font-weight:500;">
+                                            {{ hr.caseno }}
+                                        </td>
+
+                                        <td
+                                            style="padding:10px; border:1px solid #eee; color:#2e59d9; font-weight:500;">
+                                            {{ hr.hearing_date | date:'dd-MMM-yy' }}
+                                        </td>
+
+                                        <td style=" padding:10px; border:1px solid #eee;">
+                                            {{ hr.courtName }}
+                                        </td>
+                                          <td style="padding:10px; border:1px solid #eee;">
+                                            {{ hr.thanaName }}
+                                        </td>
+
+                                        <td style="padding:10px; border:1px solid #eee;">
+                                            {{ hr.mouzaName }}
+                                        </td>
+
+                                      
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- GRAPH 2: CATEGORY DISTRIBUTION -->
+                    <div hidden class="card">
+                        <div class="card-title">Category Distribution</div>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+
+                    <!-- GRAPH 3: DOCUMENT PROGRESS -->
+                    <div class="card"> <div class="card-title" style="background:linear-gradient(90deg,#4e73df,#224abe); color:#fff;
+                     padding:12px 15px; font-size:16px; font-weight:600;"> 🚨 মামলার প্রায়োরিটি
+                        </div>
+                        <canvas id="documentChart"></canvas>
+                    </div>
+
+                    <!-- 4. MUTATION WISE LAND -->
+                    <div class="card ">
+                        <div class="card-title" style="background:linear-gradient(90deg,#4e73df,#224abe);
+              color:#fff;
+              padding:12px 15px;
+              font-size:16px;
+              font-weight:600;">
+                            🏛️ কোম্পানি অনুযায়ী মামলা
+                        </div>
+
+                        <canvas id="companyChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

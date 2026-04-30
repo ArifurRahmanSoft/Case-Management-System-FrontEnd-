@@ -1,0 +1,463 @@
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="card-header pt-0 pb-0 pl-2 pr-0 clearfix"
+                    style="height: 30px; border: 1px solid #ccc; background-color: #138496;">
+                    <h4 class="myCustomTitle pt-1"><i style="font-size: 14px;"
+                            class="fa fa-table"></i>{{cmnEntity.isShow?'খাজনার নামজারি তালিকা':'নামজারি অনুসারে খাজনা
+                        প্রদান'}}
+                    </h4>
+
+                    <common-button-top #cmnsrv (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                        [btnForm]="khajnaDocForm"></common-button-top>
+                    <button
+                        style="float: right; margin-top: -25px; padding-top: 3px; padding-bottom: 3px; border-radius: 0;"
+                        type="button" class="btn btn-info btn-sm"
+                        *ngIf="(cmnEntity.isView || cmnEntity.isInsert || cmnEntity.isUpdate) && !cmnEntity.isShow"
+                        (click)="cmnEntity.isEdit=false; cmnEntity.isViewOnly=false; showHide(); cmnEntity.isShow=true;"><i
+                            class="fa fa-list"></i> Show List</button>
+                </div>
+
+                <!-- Entry Form -->
+                <div *ngIf="!cmnEntity.isShow" class="col-md-12 pl-0 pr-0 pt-2 pb-0 m-0 table-primary">
+                    <div class="row p-0 m-0" style="text-align: center;">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0 p-0"
+                            style="text-align: center;">
+                            <h6 style="text-align: center;">খাজনা প্রদানঃ
+                                জেলা-{{mutationEntity.districtName}},
+                                থানা-{{mutationEntity.thanaName}}, মৌজা-{{mutationEntity.mouzaName}},
+                                খতিয়ান-{{mutationEntity.khatianNo}},
+                                জোত-{{mutationEntity.jotNo}}, তারিখ-{{mutationEntity.mutationDate | date:'dd-MM-yy'}},
+                                সর্বশেষ
+                                বছর-{{mutationEntity.lastKhajnaYear}}, মোট বকেয়া (বছর)-{{mutationEntity.totalDueYear}}
+                            </h6>
+                        </div>
+                    </div><br>
+
+                    <form id="subForm" [formGroup]="khajnaDocForm" #f="ngForm" class="form-horizontal">
+                        <div class="row p-0 pt-2 m-0">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="khajnaAmount"
+                                        style="float: left;">খাজনার পরিমানঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="khajnaAmount" min="0" type="number"
+                                                style="height: auto;" (change)="calTotal()"
+                                                class="form-control form-control-sm input-sm input-sm-*"
+                                                id="khajnaAmount" placeholder="খাজনার পরিমান লিখুন" name="khajnaAmount">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="khajnaDate"
+                                        style="float: left;">খাজনার তারিখঃ</label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <input formControlName="khajnaDate" type="date" (change)="getBDDate()"
+                                            style="height: auto; width: 95%;"
+                                            class="form-control form-control-sm input-sm input-sm-*" id="khajnaDate"
+                                            placeholder="সর্বশেষ খাজনার তারিখ লিখুন" name="khajnaDate">
+
+                                        <!-- <label class="control-label" style="float: left;">{{bddate}}</label> -->
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="fineAmount"
+                                        style="float: left;">জরিমানাঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="fineAmount" min="0" type="number"
+                                                style="height: auto;" (change)="calTotal()"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="fineAmount"
+                                                placeholder="জরিমানা লিখুন" name="fineAmount">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="remarks"
+                                        style="float: left;">মন্তব্য: </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <textarea rows="2" cols="3" formControlName="remarks" type="number"
+                                                style="height: auto;"
+                                                class="form-control form-control-sm input-sm input-sm-*" id="remarks"
+                                                placeholder="মন্তব্য লিখুন" name="remarks"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="totalAmount"
+                                        style="float: left;">মোট প্রদানঃ </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <input formControlName="totalAmount" type="number" style="height: auto;"
+                                                disabled class="form-control form-control-sm input-sm input-sm-*"
+                                                id="totalAmount" placeholder="স্বয়ংক্রিয়ভাবে মোট প্রদত্ত টাকা দেখাবে"
+                                                name="totalAmount">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" style="float: left;">আপলোড:
+                                    </label>
+                                    <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                        <input type="file" multiple="multiple" id="attachedFile"
+                                            (change)="onFileChange()" #fileInput>
+                                        <br><br>
+                                        <div style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                            <label *ngIf="documentList.length>0"
+                                                (click)="_conversion.viewDocument(fileSrc.changingThisBreaksApplicationSecurity)"
+                                                alt="Document"
+                                                style="width: 90%; text-decoration: underline; color: blue; cursor: pointer;">{{fileSrcName}}</label>
+                                            <label *ngIf="documentList.length==0"
+                                                (click)="_conversion.viewDocument(fileSrc)" alt="Document"
+                                                style="width: 90%; text-decoration: underline; color: blue; cursor: pointer;">{{fileSrcName}}</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body pl-0 pr-4 pt-0 pb-0" *ngIf="!cmnEntity.isShow && khajnaList.length>0">
+
+                <div class="row pr-0">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style="height:580px; overflow-x:auto;">
+                            <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                style="overflow: auto; width:100%;">
+                                <thead class="table-dark"
+                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                    <tr class="gradiantBackground myCustomTableHeaderText">
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খাজনার বছর (ইং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খাজনার তারিখ (ইং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খাজনার বছর (বাং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খাজনার তারিখ (বাং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খাজনার পরিমান</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            জরিমানা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মোট খাজনা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মন্তব্য</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            সর্বশেষ পরিশোধিত বছর</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মোট বকেয়া বছর</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            পূর্ববর্তী বছর (ইং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            পূর্ববর্তী তারিখ (ইং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            পূর্ববর্তী বছর (বাং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            পূর্ববর্তী তারিখ (বাং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            অর্থ বছর (ইং)</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            দাখিলা</th>
+                                        <th *ngIf="loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 5%;">
+                                            এ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                    <tr *ngFor="let item of this.khajnaList;let sl = index">
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khajnaYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khajnaDate}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khajnaYearBN}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khajnaDateStrBN}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khajnaAmount}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.fineAmount}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.totalAmount}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.remarks}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastDueYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.totalDueYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastPayYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastPayDate}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastPayYearBN}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastPayDateStrBN}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.fiscalYearEng}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1"
+                                            style="text-align: center; text-decoration: underline; color: blue; cursor: pointer;"
+                                            (click)="_conversion.viewDocument(item.docVpath)">
+                                            {{item.docVpath!=null && item.docVpath!=''?'খাজনা
+                                            রশিদ-'+_conversion.enNumToBnNum(item.khajnaYearBN):null}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <span type="button" class="btn btn-sm" *ngIf="cmnEntity.isView"
+                                                (click)="editPayment(item); cmnEntity.isEdit=false; cmnEntity.isViewOnly=true;">
+                                                <i class="text-info fa fa-eye"></i></span>
+
+                                            <span type="button" class="btn btn-sm" *ngIf="cmnEntity.isUpdate"
+                                                (click)="editPayment(item); cmnEntity.isEdit=true; cmnEntity.isViewOnly=false;">
+                                                <i class="text-warning fa fa-edit"></i></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List-->
+            <div *ngIf="cmnEntity.isShow" class="card-body pl-0 pr-4 pt-2"
+                style="min-height: 460px; margin-bottom: -20px;">
+
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="districtsId"
+                                style="float: left;">জেলা: </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="districtsId" [options]="options" [allowClear]="true"
+                                    id="districtsId" name="districtsId" (valueChanged)="getThanasById($event)"
+                                    [data]="districtsList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="thanasId"
+                                style="float: left;">থানা: </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="thanasId" [options]="options" [allowClear]="true" id="thanasId"
+                                    (valueChanged)="getMouzasById($event)" name="thanasId" [data]="thanasList"
+                                    [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="mouzasId"
+                                style="float: left;">মৌজা: </label>
+                            <div class="col-sm-9 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="mouzasId" [options]="options" [allowClear]="true" id="mouzasId"
+                                    name="mouzasId" [data]="mouzasList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group clearfix">
+                            <label class="control-label col-sm-2 ml-1 p-0 m-0 pt-1" for="statusId"
+                                style="float: left;">স্ট্যাটাস: </label>
+                            <div class="col-sm-7 p-0 m-0" style="float: left;">
+                                <ng-select2 [(ngModel)]="statusId" [options]="options" [allowClear]="true" id="statusId"
+                                    name="statusId" [data]="statusList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                </ng-select2>
+                            </div>
+
+                            <button class="btn btn-success btn-sm pull-right"
+                                (click)="getListByPages(pageSize)">দেখাও</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <pager-top #cmnpagerTop (setPage)="getListByPage($event)" (sendList)="muteKhajnaList=$event"
+                            [pageSize]="pageSize" [searchVal]="searchVal" [strId]="districtsId" [strId2]="thanasId"
+                            [strId3]="mouzasId" [strId4]="statusId" [strYear]="toYearBn" [IsSearchOnServer]="true"
+                            [responseTag]="responseTag" [apiUrl]="_listByPageUrl">
+                        </pager-top>
+                    </div>
+                </div>
+
+                <div class="row pr-2">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style="height:700px; overflow:auto;">
+                            <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                *ngIf="this.isLoaded">
+                                <thead class="table-dark"
+                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                    <tr class="myCustomTableHeaderText">
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            খতিয়ান নং</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            যোত নং</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            নামজারি তারিখ</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            জেলা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5pxদ; z-index:1; cursor: pointer; text-align: center;">
+                                            থানা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মৌজা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            মোট বকেয়া বছর</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            সর্বশেষ পরিশোধিত <br>
+                                            বাংলা সন</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            সর্বশেষ দাখিলা</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            স্ট্যাটাস</th>
+                                        <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 15%;">
+                                            এ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                    <tr *ngFor="let item of this.muteKhajnaList;let sl = index">
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.khatianNo}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.jotNo}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.mutationDate | date:'dd-MM-yy'}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.districtName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.thanaName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.mouzaName}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.totalDueYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{item.lastKhajnaYear}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1"
+                                            style="text-align: center; text-decoration: underline; color: blue; cursor: pointer;"
+                                            (click)="_conversion.viewDocument(item.docVpath)">
+                                            {{item.docVpath!=null && item.docVpath!=''?'খাজনা
+                                            রশিদ-'+_conversion.enNumToBnNum(item.lastKhajnaYear):null}}
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <h6><span
+                                                    class="badge badge-pill badge-{{item.khajnaStatus==1?'success':item.khajnaStatus==2?'danger':'warning'}}">{{item.khajnaStatus==1?'পরিশোধিত':item.khajnaStatus==2?'বকেয়া':'নতুন'}}</span>
+                                            </h6>
+                                        </td>
+                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <span type="button" *ngIf="false" class="btn btn-sm"
+                                                (click)="loadReportOut(item.deedId);"
+                                                style="padding-bottom: 3px; margin-right: 2px; float: left;"><i
+                                                    class="text-danger fa fa-file-pdf-o"></i></span>
+
+                                            <span type="button" class="btn btn-sm" *ngIf="item.khajnaStatus=='1'">
+                                                <i class="text-success fa fa-check"></i></span>
+
+                                            <span type="button" class="btn btn-outline-success btn-sm"
+                                                *ngIf="(cmnEntity.isView || cmnEntity.isInsert || cmnEntity.isUpdate) && item.khajnaStatus!='1'"
+                                                (click)="cmnEntity.isEdit=false; cmnEntity.isViewOnly=false; cmnEntity.isShow=false; newPayment(item);">
+                                                <i class="text-warning fa fa-money"></i> পরিশোধ করুন</span>
+                                            <!-- <common-button-option #cmnbuttonoption style="float: left;"
+                                                *ngIf="item.isPosted=='0' || loggedInfo.roleId=='1' || loggedInfo.roleId=='2'"
+                                                (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                                                [model]="item" [itemName]="item.deedNo"></common-button-option> -->
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pr-2">
+                    <div class="col-md-12">
+                        <pager-bottom #cmnpager (setPage)="getListByPage($event)" (sendList)="muteKhajnaList=$event"
+                            [searchVal]="searchVal" [strId]="districtsId" [strId2]="thanasId" [strId3]="mouzasId"
+                            [strId4]="statusId" [strYear]="toYearBn" [cmnEntity]="cmnEntity" [pageSize]="pageSize"
+                            [responseTag]="responseTag" [apiUrl]="_listByPageUrl"></pager-bottom>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

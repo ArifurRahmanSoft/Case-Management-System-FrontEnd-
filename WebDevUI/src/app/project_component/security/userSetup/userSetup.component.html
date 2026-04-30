@@ -1,0 +1,212 @@
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-11 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="card-header pt-0 pb-0 pl-2 pr-0 clearfix"
+                    style="height: 30px; border: 1px solid #ccc; background-color: #138496;">
+                    <h4 class="myCustomTitle pt-1"><i style="font-size: 14px;" class="fa fa-table"></i>
+                        {{cmnEntity.isShow?'List':'Create'}} User</h4>
+                    <common-button-top #cmnsrv (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                        [btnForm]="userForm"></common-button-top>
+                </div>
+
+                <!-- Entry Form -->
+                <div *ngIf="!cmnEntity.isShow" class="col-md-12 pl-0 pr-0 pt-2 pb-0 m-0 table-primary">
+                    <div class="container">
+                        <form id="subForm" [formGroup]="userForm" #f="ngForm" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group clearfix">
+                                        <label class="control-label col-sm-2 p-0 m-0 mt-2" for="empId"
+                                            style="float: left;">Employee Id: </label>
+                                        <div class="col-sm-6 p-0 m-0 mt-1" style="float: left;">
+                                            <input formControlName="empId"
+                                                type="text" class="form-control form-control-sm input-sm input-sm-*"
+                                                id="empId" (keyup.enter)="getEmployeeDetail()"
+                                                placeholder="Enter Employee ID" name="empId">
+                                        </div>
+
+                                        <span type="button" class="btn btn-success btn-md ml-4 mt-1"
+                                            (click)="getEmployeeDetail()"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row pr-2" *ngIf="searchUserList.length>0">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:445px; overflow:auto;">
+                                    <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                        *ngIf="this.isLoaded">
+                                        <thead class="table-dark"
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                            <tr class="gradiantBackground banglaTitle myCustomTableHeaderText">
+                                                <th
+                                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                    Employee ID</th>
+                                                <th
+                                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                    Name</th>
+                                                <th
+                                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                    Designation</th>
+                                                <th
+                                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                    Department</th>
+                                                <!-- <th
+                                                    style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                    Action</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody class="banglaTitle p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                            <tr *ngFor="let item of searchUserList;let sl = index">
+                                                <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center">
+                                                    {{item.empId}}</td>
+                                                <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center">
+                                                    {{item.empName}}</td>
+                                                <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center">
+                                                    {{item.empDesig}}</td>
+                                                <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center">
+                                                    {{item.empDept}}</td>
+                                                <!-- <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;" width="10%">
+                                                    <button type="button" class="btn btn-success btn-sm">Create
+                                                        User</button>
+                                                </td> -->
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- List-->
+                <div *ngIf="cmnEntity.isShow" class="card-body pl-0 pr-4 pt-2"
+                    style="min-height: 460px; margin-bottom: -20px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-left">
+                                <label>
+                                    Show <select name="pageSize" [(ngModel)]="pageSize"
+                                        (change)="setPagingToGetAll(1,true)">
+                                        <option *ngFor="let ps of pageSizeList" value={{ps}}>
+                                            {{ps}}
+                                        </option>
+                                    </select> entries
+                                </label>
+                            </div>
+                            <div class="pull-right mr-2">
+                                <label class="pull-right">Search: <input type="search" placeholder=""
+                                        [(ngModel)]="searchname"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pr-2">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:445px; overflow:auto;">
+                                <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                    *ngIf="this.isLoaded">
+                                    <thead class="table-dark"
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                        <tr class="gradiantBackground banglaTitle myCustomTableHeaderText">
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                                Employee ID</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                                Name</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                                Designation</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                                Department</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                Status</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="banglaTitle p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                        <tr *ngFor="let item of this.userList;let sl = index">
+                                            <td class="pl-2 pr-1 pt-1 pb-1">
+                                                {{item.empId}}
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{item.empName}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{item.empDesig}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{item.empDept}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;" width="5%">
+                                                <h6><span
+                                                        class="badge badge-pill badge-{{item.isActive?'success':'danger'}}">{{item.isActive?'Active':'Inactive'}}</span>
+                                                </h6>
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;" width="10%">
+                                                <common-button-option #cmnbuttonoption
+                                                    (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                                                    [model]="item" [itemName]="item.userName"></common-button-option>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pr-2">
+                        <div class="col-md-12">
+                            <div class="pull-left ">
+                                <span class="well well-sm">Showing <span
+                                        class="text-success"><b>{{pageStart}}</b></span> to <span
+                                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                                        class="text-success"><b>{{totalRows}}</b></span> entries</span>
+                            </div>
+                            <div class="pull-right">
+                                <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                                    <li>
+                                        <a class="btn btn-sm btn-outline-secondary"
+                                            [ngClass]="{disabled:pager.currentPage === 1}" [routerLink]=""
+                                            (click)="setPagingToGetAll(1,true)"><i class="fa fa-angle-double-left"
+                                                aria-hidden="true"></i>Start</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-sm btn-outline-info"
+                                            [ngClass]="{disabled:pager.currentPage === 1}" [routerLink]=""
+                                            (click)="setPagingToGetAll(pager.currentPage - 1,true)"><i
+                                                class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                                    </li>
+                                    <li *ngFor="let page of pager.pages">
+                                        <a class="btn btn-sm btn-outline-secondary"
+                                            [ngClass]="{active:pager.currentPage === page}" [routerLink]=""
+                                            (click)="setPagingToGetAll(page,true)">{{page}}</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-sm btn-outline-info"
+                                            [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                            [routerLink]="" (click)="setPagingToGetAll(pager.currentPage + 1,true)"><i
+                                                class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-sm btn-outline-secondary"
+                                            [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                            [routerLink]="" (click)="setPagingToGetAll(pager.totalPages,true)"><i
+                                                class="fa fa-angle-double-right" aria-hidden="true"></i>End</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

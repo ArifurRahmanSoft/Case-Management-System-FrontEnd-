@@ -1,0 +1,94 @@
+<div class="col-12 pt-0 pb-0 pl-0 pr-0">
+
+
+    <div class="col-12 m-0 pt-0 pl-0 pr-0 pb-2" style="text-align: right;">
+
+       
+        <button class="btn btn-danger pt-1 pb-1 pl-2 pr-2" (click)="closeDialog('NULL', 'NULL', 'NULL')"><i class="fa fa-close"></i> Close</button>
+
+    </div>
+
+    <div class="col-12" style="max-height: 500px; overflow-y: scroll;">  
+        
+     
+        <div class="col-12 p-0 m-0">
+            
+                <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+        
+                    <div class="col-12 p-0 m-0 card " style="border: 1px solid #ccc;">
+                
+                        <div class="card-header p-2 clearfix" style="height: 30px; border: 1px solid #ccc; background-color: #138496;">
+                            <h4 class="myCustomTitle pt-1"><i style="font-size: 14px;" class="fa fa-align-justify"></i>  Advance Search</h4>
+                        </div>
+                    
+                       
+        
+                        <div class="card-body pl-0 pr-4 pt-2">
+                
+                            <div class="col-12 m-0">
+    
+                                
+                    
+                                <table datatable [dtOptions] = "dtOptions" id="table"  class="table table-striped table-sm table-bordered p-0">
+    
+                                    <thead >
+                                      
+    
+                                            <tr class="gradiantBackground banglaTitle myCustomTableHeaderText">
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">Trans No</th> 
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">Trans Date</th>
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">LC NO</th>
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">Mother Vessel</th>
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">Status</th>
+                                                <th style="cursor: pointer; text-align: center; padding-bottom: 25px;">Action</th>
+                                            </tr>
+    
+                                    </thead>
+                                    
+                                    <tbody class="banglaTitle" style="padding-bottom: 0px; margin-bottom: 0px;">
+                        
+                                        <tr *ngFor="let trans of allTransList" style="cursor: pointer;">
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{trans.transNo}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{trans.transDate}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{trans.lcNo}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{trans.motherVessel}}</td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1">{{getStatusFromStatusCode(trans.status)}}</td>
+                                            <td>
+                                                <button class="btn btn-info btn-sm m-0" (click) = "closeDialog(trans.transNo, trans.lcNo, trans.lcOID)"><i class="fa fa-info-circle" style="text-align: center; height: 10px; margin: 0px;"></i> Details</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+    
+                                    
+    
+    
+                                </table>
+    
+                               
+                        
+                            </div>
+    
+    
+                           
+                
+                        </div>
+                
+                
+                    </div>
+                
+                </div>
+            
+        
+        </div>
+    
+    </div>
+
+   
+
+
+
+</div>
+
+
+
+

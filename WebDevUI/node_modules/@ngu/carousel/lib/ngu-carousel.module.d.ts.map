@@ -1,0 +1,1 @@
+{"version":3,"file":"ngu-carousel.module.d.ts","sources":["ngu-carousel.module.d.ts"],"names":[],"mappings":";;;;;;AAAA;;;AACA","sourcesContent":["export declare class NguCarouselModule {\r\n}\r\n"]}

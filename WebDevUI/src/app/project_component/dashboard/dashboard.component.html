@@ -1,0 +1,385 @@
+<div class="card col-md-12" style="margin: 0px; padding: 0px; ">
+    <div class="card-body" style="padding-left: 5px; padding-right: 15px; padding-top: 0px; padding-bottom: 5px; margin: 5px;">
+
+      <div class="col-md-12" style="width: 100%; padding: 0px; margin: 0px; display: inline-block;">
+
+
+        <div class="col-md-6 " style="padding: 0px; float: left; margin: 0px;">
+            <div class="col-md-12" style="padding: 0px; margin-right: 10px;">
+                <div class="card" style="min-height: 480px;">
+                  
+                  <div class="card-header alert alert-info" style="font-weight: bold; color: #2F2875; max-height: 40px; ">
+                    <div style="float: left;">
+                      <i class="fa fa-align-justify"></i> Upcomming Shipment
+                    </div>
+                  
+                    <div style="float: right; padding: 0px;">
+                  
+                      <mat-form-field style="margin-right: 15px; padding: 0px; width: 100px; font-size: 13px; color: #000;;" >
+                        <input matInput [matDatepicker]="dp1" placeholder="From Date" disabled [(ngModel)]="us_fromDate" style="color: #000;">
+                        <mat-datepicker-toggle matSuffix disabled [for]="dp1"></mat-datepicker-toggle>
+                        <mat-datepicker  #dp1 disabled="false"></mat-datepicker>
+                       
+                      </mat-form-field>
+                  
+                      <mat-form-field style="padding: 0px; width: 100px; font-size: 13px;">
+                        <input matInput [matDatepicker]="dp2" placeholder="To Date" disabled [(ngModel)]="us_toDate" style="color: #000;">
+                        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                        <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                  
+                      <button mat-mini-fab class="m-1" style="padding: 0px;" (click) = "us_search(us_fromDate, us_toDate)">
+                        <mat-icon>search</mat-icon>
+                      </button>
+                  
+                    </div>
+                  </div>
+                  
+                    <div class="card-body " style="padding: 10px;">
+                        <table id="table" datatable class="table hover table-bordered table-striped table-sm display"
+                        *ngIf="this.isLoaded" [dtOptions] = "dtOptions">
+                           <thead style="width: 100%; font-size: 12px;">
+                             <tr>
+                               <th>Shipment Date</th>
+                               <th>Supplier Name</th>
+                               <th>Item Name</th>
+                               <th>Country</th>
+                               <th>Company</th>
+                               <th>Quantity</th>
+                             </tr>
+                           </thead>
+                           <tbody style="font-size: 10px; width: 100%; color: #000; cursor: pointer;">
+                             <tr *ngFor="let data of this.myData">
+                               <td>{{data.LTRNM_SPDT | date}}</td>
+                               <td>{{data.LSUPL_NAME}}</td>
+                               <td>{{data.LITEM_NAME}}</td>
+                               <td>{{data.SCUNTRY_NAME}}</td>
+                               <td>{{data.SCOMP_NAME}}</td>
+                               <td>{{data.LTRND_QNTY}}</td>
+                             </tr>
+                           </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 " style="padding: 0px; float: left; margin: 0px;">
+            <div class="col-md-12" style="padding-right: 10px; padding-left: 0px; padding-top: 0px; padding-bottom: 0px; margin-left: 10px;">
+                <div class="card" style="min-height: 480px;">
+                    <div class="card-header alert alert-primary" style="font-weight: bold; color: #2F2875;">
+                        <i class="fa fa-align-justify"></i> Country Wise Import
+                    </div>
+                    <div class="card-body " style="padding: 0px;">
+                       
+                        <div fxLayout="row" fxLayoutAlign="space-around" style="background-color: #f5f5f5; margin: 0px; padding: 10px;">
+                            <mat-checkbox color="primary" class="example-margin" [checked]="explodeSlices" (change)="explodeSlices = !explodeSlices">Explode Slices</mat-checkbox>
+                            <mat-checkbox color="primary" class="example-margin" [checked]="showLabels" (change)="showLabels = !showLabels">Show Labels</mat-checkbox>
+                        </div>
+                        <div class="w-100 h-300p" #resizedDiv>
+                            <ngx-charts-pie-chart
+                                [scheme]="colorScheme"
+                                [results]="graphData"
+                                [legend]="showLegend"
+                                [explodeSlices]="explodeSlices"
+                                [labels]="showLabels"
+                                [doughnut]="doughnut"
+                                [gradient]="gradient"
+                                (select)="onSelect($event)">
+                            </ngx-charts-pie-chart>   
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+       
+
+      </div>
+
+
+
+
+      <div class="col-md-12" style="width: 100%; padding: 0px; margin: 0px; display: inline-block;">
+
+
+        <div class="col-md-6 " style="padding: 0px; float: left; margin: 0px;">
+            <div class="col-md-12" style="padding: 0px; margin-right: 10px;">
+                <div class="card" style="min-height: 100px;">
+                    <div class="card-header alert alert-warning" style="font-weight: bold; color: #2F2875; margin-bottom: 0px; height: 20px;">
+                        
+
+                        <div class="col-md-4" style="padding: 0px; margin: 0px; float: left;">
+                          <i class="fa fa-align-justify"></i> Year Wise Import
+                        </div>
+                        <div class="col-md-8" style="margin: 0px; padding: 0px; float: left;">
+
+                            <mat-slider class="col-md-10" style="padding: 0px;" 
+                              [disabled]="disabled" 
+                              [invert]="invert" 
+                              [max]="max" 
+                              [min]="min" 
+                              [step]="step"
+                              [thumbLabel]="thumbLabel" 
+                              [tickInterval]="tickInterval" 
+                              [(ngModel)]="value" 
+                              [vertical]="vertical"
+                              (change)="onInputChange($event)">
+                            </mat-slider>
+                           <h6 style="display: inline; text-align: right;"> Year</h6>
+
+                            
+                          
+                          
+                        </div>
+                    </div>
+                    <div class="card-body " style="padding: 0px;">
+
+                    <div class="col-md-12 w-100 h-300p" style="padding: 0px; margin: 0px;"  >
+
+                      
+                        <ngx-charts-bar-vertical
+                              [scheme]="colorScheme"
+                              [gradient]="gradient"
+                              [xAxis]="showXAxis"
+                              [yAxis]="showYAxis"
+                              [legend]="showLegend"
+                              [showXAxisLabel]="showXAxisLabel"
+                              [showYAxisLabel]="showYAxisLabel"
+                              [xAxisLabel]="xAxisLabel"
+                              [yAxisLabel]="yAxisLabel"
+                              [results]="barGraphData"
+                              (select)="onSelect($event)"
+                              >
+                        </ngx-charts-bar-vertical>   
+                                    
+                    </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 " style="padding: 0px; float: left; margin: 0px;">
+            <div class="col-md-12" style="padding-right: 10px; padding-left: 0px; padding-top: 0px; padding-bottom: 0px; margin-left: 10px;">
+                <div class="card" style="min-height: 480px;">
+                  <div class="card-header alert alert-danger" style="font-weight: bold; color: #2F2875; max-height: 40px;">
+                    <div style="float: left;">
+                      <i class="fa fa-align-justify"></i> Yearly Import
+                    </div>
+                  
+                    <div style="float: right; padding: 0px;">
+                  
+                      <div style="margin-right: 15px; padding: 0px; width: 100px; font-size: 13px; float: left;" >
+                        <ng-select2 id="idFromYear" #idFromYear [(ngModel)]="modelFromYear" [options]="options" [allowClear] = "true" style="min-width: 1000px; " [data]="from_year" [placeholder]="'From year'" >
+                        </ng-select2>
+                      </div>
+                  
+                      <div style="margin-right: 15px; padding: 0px; width: 100px; font-size: 13px; float: left;">
+                        <ng-select2 #idToYear [(ngModel)]="modelToYear" [options]="options" [allowClear] = "true" style="min-width: 1000px; " 
+                        [data]="to_year" [placeholder]="'To year'">
+                        </ng-select2>
+                      </div>
+
+                      <div style="margin-right: 15px; padding: 0px; width: 200px; font-size: 13px; float: left;">
+                        <ng-select2 #idItem  [(ngModel)]="modelItem" [options]="options" [allowClear] = "true" 
+                        style="min-width: 300px; " [data]="finalProductList" [placeholder]="'Select Item'">
+                        </ng-select2>
+                      </div>
+                  
+                      <button mat-mini-fab  style="padding: 0px; margin: 0px;" (click) = "item_search(modelFromYear, modelToYear, modelItem)">
+                        <mat-icon style="padding: 0px;">search</mat-icon>
+                      </button>
+                  
+                    </div>
+                  </div>
+                    
+                    <div class="card-body " style="padding: 10px;">
+                      
+                      <table id="table" datatable class="table hover table-bordered table-striped table-sm display"
+                      *ngIf="this.isLoadedYearlyImportTable" [dtOptions] = "dtOptions">
+                         <thead style="width: 100%; font-size: 12px;">
+                           <tr>
+                             <th>Year</th>
+                             <th>Month</th>
+                             <th>Item Name</th>
+                             <th>Qty</th>
+                             <th>BD Value</th>
+                             
+                           </tr>
+                         </thead>
+                         <tbody style="font-size: 10px; width: 100%; color: #000; cursor: pointer;">
+                           <tr *ngFor="let d of this.yearlyImportTable">
+                             <td>{{d.SHIPMENTYEAR}}</td>
+                             <td>{{d.SHIPMENTMONTH}}</td>
+                             <td>{{d.LITEM_NAME}}</td>
+                             <td>{{d.SHIP_QNTY}}</td>
+                             <td>{{d.BDVALUE}}</td>
+                             
+                           </tr>
+                         </tbody>
+                       </table>
+
+                  </div>
+
+
+                  <!-- <div class="card-body " style="padding: 10px;">
+                    <table id="table" datatable class="table hover table-bordered table-striped table-sm display"
+                    *ngIf="this.isLoadedYearlyImportTable" >
+                       <thead style="width: 100%; font-size: 12px;">
+                         <tr>
+                          <th>Year</th>
+                          <th>Month</th>
+                          <th>Item Name</th>
+                          <th>Qty</th>
+                          <th>BD Value</th>
+                         </tr>
+                       </thead>
+                       <tbody style="font-size: 10px; width: 100%; color: #000; cursor: pointer;">
+                         <tr *ngFor="let data of yearlyImportTable">
+                           <td>{{data.SHIPMENTYEAR }}</td>
+                           <td>{{data.SHIPMENTMONTH}}</td>
+                           <td>{{data.LITEM_NAME}}</td>
+                           <td>{{data.SHIP_QNTY}}</td>
+                           <td>{{data.BDVALUE}}</td>
+                         </tr>
+                       </tbody>
+                     </table>
+                </div> -->
+
+
+                </div>
+            </div>
+        </div>
+
+
+       
+
+      </div>
+
+
+
+
+
+
+
+      <div class="col-md-12" style="width: 100%; padding: 0px; margin: 0px; display: inline-block;">
+
+
+        
+
+        <div class="col-md-12 " style="padding: 0px; float: left; margin: 0px;">
+            <div class="col-md-12" style="padding-right: 10px; padding-left: 0px; padding-top: 0px; padding-bottom: 0px; margin-left: 0px;">
+                <div class="card" style="min-height: 400px;">
+                    <div class="card-header alert alert-danger" style="font-weight: bold; color: #2F2875; max-height: 40px;">
+                      <div style="float: left;">
+                        <i class="fa fa-align-justify"></i> Product LC Open
+                      </div>
+                    
+                      <div style="float: right; padding: 0px;">
+                    
+                        <mat-form-field style="margin-right: 15px; padding: 0px; width: 100px; font-size: 13px;" >
+                          <input matInput [matDatepicker]="dp3" placeholder="From Date" disabled [(ngModel)]="fromDate" style="color: #000;">
+                          <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                          <mat-datepicker  #dp3 disabled="false"></mat-datepicker>
+                         
+                        </mat-form-field>
+                    
+                        <mat-form-field style="padding: 0px; width: 100px; font-size: 13px;">
+                          <input matInput [matDatepicker]="dp4" placeholder="To Date" disabled [(ngModel)]="toDate" style="color: #000;">
+                          <mat-datepicker-toggle matSuffix [for]="dp4"></mat-datepicker-toggle>
+                          <mat-datepicker #dp4 disabled="false"></mat-datepicker>
+                        </mat-form-field>
+                    
+                        <button mat-mini-fab class="m-1" style="padding: 0px;" (click) = "search(fromDate, toDate)">
+                          <mat-icon>search</mat-icon>
+                        </button>
+                    
+                      </div>
+                    </div>
+                    
+                    <div class="card-body " style="padding: 10px;">
+                      <table id="table" datatable class="table hover table-bordered table-striped table-sm display"
+                      *ngIf="this.isLoadedProductLC" [dtOptions] = "dtOptions" >
+                         <thead style="width: 100%; font-size: 12px;">
+                           <tr>
+                             <th>LC No</th>
+                             <th>LC Date</th>
+                             <th>Item Name</th>
+                             <th>Qty</th>
+                             <th>Dollar Value</th>
+                             <th>BD Value</th>
+                             <th>Country</th>
+                             <th>Company Name</th>
+                           </tr>
+                         </thead>
+                         <tbody style="font-size: 10px; width: 100%; color: #000; cursor: pointer;">
+                           <tr *ngFor="let data of this.productLcOpen">
+                             <td>{{data.LTRNM_LCNO}}</td>
+                             <td>{{data.LTRNM_LCDT | date}}</td>
+                             <td>{{data.LITEM_NAME}}</td>
+                             <td>{{data.LTRND_QNTY}}</td>
+                             <td>{{data.DOLLARVALUE}}</td>
+                             <td>{{data.BDVALUE}}</td>
+                             <td>{{data.SCUNTRY_NAME}}</td>
+                             <td>{{data.SCOMP_NAME}}</td>
+                           </tr>
+                         </tbody>
+                       </table>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+
+
+       
+
+      </div>
+
+
+      
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="col-md-6 mat-elevation-z6 table-responsive" style="margin: 10px; padding: 10px; border: 1px solid #ccc;">
+    <table id="table" datatable class="table hover table-bordered table-striped table-sm display "
+     *ngIf="this.isLoaded" >
+        <thead style="width: 100%; font-size: 12px;">
+          <tr>
+            <th>Shipment Date</th>
+            <th>Item Name</th>
+            <th>Country</th>
+            <th>Company</th>
+           
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody style="font-size: 10px; width: 100%; color: #000; cursor: pointer;">
+          <tr *ngFor="let data of this.myData">
+            <td>{{data.LTRNM_SPDT | date}}</td>
+            <td>{{data.LITEM_NAME}}</td>
+            <td>{{data.SCUNTRY_NAME}}</td>
+            <td>{{data.SCOMP_NAME}}</td>
+            <td>{{data.LTRND_QNTY}}</td>
+          </tr>
+        </tbody>
+      </table>
+</div> -->

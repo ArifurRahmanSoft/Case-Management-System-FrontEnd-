@@ -1,0 +1,20 @@
+﻿<div class="p-0">
+    <!-- 3-View -->
+    <button class="{{cmnEntity.cmnBtn[3].bClass}}" title="Click to view record" style="z-index: 0;"
+        (click)="execute($event, cmnEntity.cmnBtn[3].btnFunc); cmnEntity.isEdit=false; cmnEntity.isViewOnly=true; cmnEntity.isShow=false;"
+        *ngIf="cmnEntity.isView && cmnEntity.cmnBtn[3].isShowBtn">
+        <span><i class="{{cmnEntity.cmnBtn[3].iClass}}"></i></span>
+    </button>
+    <!-- 4-Edit -->
+    <button class="{{cmnEntity.cmnBtn[4].bClass}}" title="Click to edit record" style="z-index: 0;"
+        (click)="execute($event, cmnEntity.cmnBtn[4].btnFunc); cmnEntity.isEdit=true; cmnEntity.isViewOnly=false; cmnEntity.isShow=false;"
+        *ngIf="cmnEntity.isUpdate && cmnEntity.cmnBtn[4].isShowBtn">
+        <span><i class="{{cmnEntity.cmnBtn[4].iClass}}"></i></span>
+    </button>
+    <!-- 5-Delete -->
+    <button class="{{cmnEntity.cmnBtn[5].bClass}}" title="Click to delete record" style="z-index: 0;"
+        (click)="openModal(5); cmnEntity.isEdit=false; cmnEntity.isViewOnly=false"
+        *ngIf="cmnEntity.isDelete && cmnEntity.cmnBtn[5].isShowBtn">
+        <span><i class="{{cmnEntity.cmnBtn[5].iClass}}"></i></span>
+    </button>
+</div>

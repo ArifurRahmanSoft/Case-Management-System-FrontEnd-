@@ -1,0 +1,17 @@
+<div class="sidenav-menu-outer" [perfectScrollbar]="psConfig" [disabled]="settings.fixedSidenavUserContent">    
+   
+   
+    <div fxLayout="column" fxLayoutAlign="center center" class="user-block" [class.py-3]="settings.menuType != 'mini'" [class.py-2]="settings.menuType == 'mini'">
+        <img [src]="employeePhoto || './assets/img/users/default-user.jpg'">
+        <h2 *ngIf="settings.menuType != 'mini'" class="mt-2">{{exployeeName}}</h2>
+        <p *ngIf="settings.menuType == 'default'" class="secondary-text-color">{{employeeDesignation}}</p>
+        <!-- <p *ngIf="settings.menuType == 'default'" class="secondary-text-color">{{employeeEmail}}</p> -->
+    </div>
+    <mat-divider></mat-divider>
+
+
+    <div id="vertical-menu" [perfectScrollbar]="psConfig" [disabled]="!settings.fixedSidenavUserContent">
+        <app-vertical-menu></app-vertical-menu> 
+        <!-- [menuItems]="menuItems" [menuParentId]="0" -->
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿<div class="" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="viewModalTitle" aria-hidden="true">
+    <div class="" role="document">
+        <div class="">
+            <div class="">
+                <h5 class="modal-title pull-left" id="viewModalTitle"><i class="fa fa-exclamation-triangle"
+                        style="color:#f60"></i> Confirmation</h5>
+            </div>
+            <br>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tabView" role="tabpanel">
+                        <div class="col-sm-12">
+                            <div class="form-group clearfix">
+                                <div style="text-align:center">
+                                    <strong *ngIf="isShowMsgOne">Are you sure ?</strong>
+                                    <div *ngIf="isShowMsgOne" class="clear"></div>
+                                    <span id="custMessage" *ngIf="isShowMsgTwo">{{custMessage}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="history" role="tabpanel">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding:0">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success mr-1" mat-dialog-close aria-label="Close" aria-label="Close"
+                        (click)="executeConf($event, true)">Yes</button>                    
+                    <button type="button" class="btn btn-danger mr-1" mat-dialog-close aria-label="Close" aria-label="Close"
+                        (click)="executeConf($event, false)" *ngIf="isDualAction">No</button>
+                    <button type="button" class="btn btn-default mr-1"
+                        style="background: #8998B1; border-color: #8998B7; color: #fff;" mat-dialog-close aria-label="Close"
+                        aria-label="Close">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

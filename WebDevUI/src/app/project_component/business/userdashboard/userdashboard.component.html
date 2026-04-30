@@ -1,0 +1,72 @@
+<!-- <div class="dashboard-card">
+  <h3>Total Land Quantity</h3>
+  <h1>{{ totalLandQuntaty }}</h1>
+</div>
+
+<div style="display: block; width: 400px; margin: auto;">
+  <canvas baseChart
+          [data]="pieChartData"
+          [labels]="pieChartLabels"
+          [chartType]="pieChartType"
+          [options]="pieChartOptions">
+  </canvas>
+</div> -->
+
+
+
+
+
+<div class="col-12 p-0 m-0">
+    <div class="d-flex justify-content-center p-0 m-0">
+        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
+                style="border: 1px solid #ccc;">
+
+                <div class="col-md-12 card-header"
+                    style="border: 1px solid #ccc; background-color: #3B82F6; text-align: center; color: #fff;">
+                    <h1><mat-icon>dashboard</mat-icon> Management Dashboard Features </h1>
+                </div>
+                <br>
+
+
+                <div class="dashboard">
+
+                    <!-- GRAPH 1: TOTAL LAND HOLDING -->
+                    <div class="card">
+                        <div class="card-title">Total Land Holding</div>
+
+                        <div class="land-box">
+                            <!-- <img src="'./assets/img/app/lms1.png'" alt="Land" /> -->
+                            <img [src]="'./assets/img/app/total_land.webp'">
+                            <h2>{{ totalLand }} Acre</h2>
+                        </div>
+                    </div>
+
+                    <!-- GRAPH 2: CATEGORY DISTRIBUTION -->
+                    <div class="card">
+                        <div class="card-title">Category Distribution</div>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+
+                    <!-- GRAPH 3: DOCUMENT PROGRESS -->
+                    <div class="card">
+                        <div class="card-title">Document Progress</div>
+                        <canvas id="documentChart"></canvas>
+                    </div>
+
+                    <!-- 4. MUTATION WISE LAND -->
+                    <div class="card ">
+                        <div class="card-title">Mutation Wise Land</div>
+                        <canvas id="mutationChart"></canvas>
+                    </div> 
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                    

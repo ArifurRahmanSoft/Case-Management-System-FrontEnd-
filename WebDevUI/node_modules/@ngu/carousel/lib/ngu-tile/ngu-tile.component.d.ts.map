@@ -1,0 +1,1 @@
+{"version":3,"file":"ngu-tile.component.d.ts","sources":["ngu-tile.component.d.ts"],"names":[],"mappings":";AAAA;AACA;;;AACA","sourcesContent":["export declare class NguTileComponent {\r\n    classes: boolean;\r\n}\r\n"]}

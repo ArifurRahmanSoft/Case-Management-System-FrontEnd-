@@ -1,0 +1,1 @@
+{"version":3,"file":"ngu-item.component.d.ts","sources":["ngu-item.component.d.ts"],"names":[],"mappings":";AAAA;AACA;;;AACA","sourcesContent":["export declare class NguItemComponent {\r\n    classes: boolean;\r\n}\r\n"]}

@@ -1,0 +1,11 @@
+<div *ngIf="isOn" class="col-md-12" style="text-align: center; padding: 0; background: #323639; height: 5vh;">
+    <select name="rptType" [(ngModel)]="rptType" (change)="setReportType()"
+        style="background: #323639; color: white; border-color: #323639;">
+        <option *ngFor="let ps of reportTypeList" value={{ps.rndrType}}>
+            {{ps.display}}
+        </option>
+    </select>
+    <iframe [src]="trustedUrl" width="100%" [style.height.px]="rptModel.reportHeight" allowfullscreen
+        target="_blank"></iframe>
+    <iframe style="display: none;" *ngIf="isDownload" [src]="trustedUrls"></iframe>
+</div>

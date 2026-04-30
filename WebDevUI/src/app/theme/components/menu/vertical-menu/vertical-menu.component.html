@@ -1,0 +1,70 @@
+<div class="menu-item" *ngIf="listMenues.length">
+    <div *ngFor="let menu of listMenues;let sl = index">
+        <div *ngIf="menu.menuName!=='Home'">
+            <a mat-button fxLayout="row" *ngIf="!menu.hasChild"
+                (click)="closeOtherChildMenus(listMenues, 0, 'pmenu_', 'cmenu_')"
+                [fxLayoutAlign]="(settings.menuType=='default') ? 'start center' : 'center center'"
+                [matTooltip]="menu.menuName" matTooltipPosition="after"
+                [matTooltipDisabled]="(settings.menuType=='mini') ? 'false' : 'true'" routerLink="{{menu.menuPath}}"
+                (click)="setMenu($event,menu)" (contextmenu)="setMenu($event,menu)" [routerLinkActive]="[active]"
+                [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon class="menu-icon">{{menu.menuIcon}}</mat-icon>
+                <span class="menu-title">{{menu.menuName}}</span>
+            </a>
+
+            <a mat-button fxLayout="row" id="pmenu_{{menu.menuId}}"
+                (click)="toggleParentChildMenu(listMenues, menu, 'pmenu_', 'cmenu_')" *ngIf="menu.hasChild"
+                [fxLayoutAlign]="(settings.menuType=='default') ? 'start center' : 'center center'"
+                [matTooltip]="menu.menuName" matTooltipPosition="after"
+                [matTooltipDisabled]="(settings.menuType=='mini') ? 'false' : 'true'">
+                <mat-icon class="menu-icon">{{menu.menuIcon}}</mat-icon>
+                <span class="menu-title">{{menu.menuName}}</span>
+                <mat-icon class="menu-expand-icon transition-2">arrow_drop_down</mat-icon>
+            </a>
+
+            <!--cmenu.ChildMenues = cmenu.ChildMenuesSub-->
+            <div class="sub-menu" id="cmenu_{{menu.menuId}}" *ngIf="menu.hasChild">
+                <div *ngFor="let cmenu of menu.ChildMenues;let ssl = index">
+                    <a mat-button fxLayout="row" *ngIf="!cmenu.hasChild"
+                        (click)="closeOtherChildMenus(menu.ChildMenues, 0, 'pcmenu_', 'csmenu_')"
+                        [fxLayoutAlign]="(settings.menuType=='default') ? 'start center' : 'center center'"
+                        [matTooltip]="cmenu.menuName" matTooltipPosition="after"
+                        [matTooltipDisabled]="(settings.menuType=='mini') ? 'false' : 'true'"
+                        routerLink="{{cmenu.menuPath}}" (click)="setMenu($event,cmenu)"
+                        (contextmenu)="setMenu($event,cmenu)" [routerLinkActive]="[active]"
+                        [routerLinkActiveOptions]="{ exact: true }">
+                        <mat-icon class="menu-icon">{{cmenu.menuIcon}}</mat-icon>
+                        <span class="menu-title">{{cmenu.menuName}}</span>
+                    </a>
+
+
+                    <a mat-button fxLayout="row" id="pcmenu_{{cmenu.menuId}}"
+                        (click)="toggleParentChildMenu(menu.ChildMenues, cmenu, 'pcmenu_', 'csmenu_')"
+                        *ngIf="cmenu.hasChild"
+                        [fxLayoutAlign]="(settings.menuType=='default') ? 'start center' : 'center center'"
+                        [matTooltip]="cmenu.menuName" matTooltipPosition="after"
+                        [matTooltipDisabled]="(settings.menuType=='mini') ? 'false' : 'true'">
+                        <mat-icon class="menu-icon">{{cmenu.menuIcon}}</mat-icon>
+                        <span class="menu-title">{{cmenu.menuName}}</span>
+                        <mat-icon class="menu-expand-icon transition-2">arrow_drop_down</mat-icon>
+                    </a>
+
+                    <div class="sub-menu" id="csmenu_{{cmenu.menuId}}" *ngIf="cmenu.hasChild">
+                        <div *ngFor="let csmenu of cmenu.ChildMenues">
+                            <a mat-button fxLayout="row"
+                                [fxLayoutAlign]="(settings.menuType=='default') ? 'start center' : 'center center'"
+                                [matTooltip]="csmenu.menuName" matTooltipPosition="after"
+                                [matTooltipDisabled]="(settings.menuType=='mini') ? 'false' : 'true'"
+                                routerLink="{{csmenu.menuPath}}" (click)="setMenu($event,csmenu)"
+                                (contextmenu)="setMenu($event,csmenu)" [routerLinkActive]="[active]"
+                                [routerLinkActiveOptions]="{ exact: true }">
+                                <mat-icon class="menu-icon">{{csmenu.menuIcon}}</mat-icon>
+                                <span class="menu-title">{{csmenu.menuName}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

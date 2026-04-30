@@ -1,0 +1,214 @@
+<div style="height: 100%;">
+    <div class="login-container">
+        <div class="login-box">
+            <!-- <div fxLayout="row" fxLayoutAlign="center center"> -->
+
+            <!-- <div class="col-md-3"> -->
+
+            <!-- <div class="col-md-12"> -->
+            <!-- <div class=""> -->
+            <!-- Logo and Title -->
+            <div class="logo" style="text-align: center;">
+                <img src="assets/img/citygroup/city_logo.png" alt="Citygroup Logo"
+                    style="width: 200px; height: auto;">
+            </div>
+            <h3>
+                <span style="color: #e6224e; font-weight: bolder; font-size: 25px;">
+                    ভূমি ব্যবস্থাপনা সিস্টেম
+                </span>
+            </h3>
+            <div class="card-body" style="margin: 0px; padding: 0px;">
+
+                <div class="col-md-12" style="padding: 0px; margin: 0px;">
+
+                    <div class="container-fluid" style="padding: 10px;">
+
+
+                        <form #userForm="ngForm" [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+
+
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <label for="employeeId">কর্মকর্তা/কর্মচারী আই.ডি</label>
+                                    <input id="userid" type="text" aria-label="Small"
+                                        aria-describedby="inputGroup-sizing-sm" autofocus
+                                        [(ngModel)]="userModel.user_id" #userid required class="form-control"
+                                        placeholder="Employee ID (E.g. 08635)" name="userid" formControlName="userid">
+
+                                    <small style="width: 100%; color: #ffffff !important;" class="text-danger"
+                                        *ngIf="form.controls['userid'].touched && form.controls['userid'].errors?.required">
+                                        এ্যামপ্লয়ি আই.ডি অবশ্যই দিতে হবে</small>
+
+                                    <small style="width: 100%; color: #ffffff !important;" class="text-danger"
+                                        *ngIf="form.controls['userid'].hasError('minlength')">
+                                        এ্যামপ্লয়ি আই.ডি কমপক্ষে ৫ ডিজিটের হতে হবে</small>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <label for="password">পাসওয়ার্ড</label>
+                                    <input id="password" [type]="showPassword ? 'text' : 'password'"
+                                        class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                                        [(ngModel)]="userModel.user_password" #password required name="password"
+                                        placeholder="Password" formControlName="password">
+
+                                    <!-- Password Toggle Button -->                                    
+                                    <div class="password-toggle-btn"
+                                        style="position: absolute; right: 10px; top: 65%; transform: translateY(-50%); z-index: 5;">
+                                        <button type="button" (click)="showPassword = !showPassword"
+                                            style="background: transparent; border: none; outline: none; color: #ffffff; padding: 5px;">
+                                            <i [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                                style="font-size: 16px;"></i>
+                                        </button>
+                                    </div>
+
+                                    <small style="width: 100%; color: #ffffff !important;" class="text-danger"
+                                        *ngIf="form.controls['password'].touched && form.controls['password'].errors?.required">
+                                        পাসওয়ার্ড অবশ্যই দিতে হবে</small>
+
+                                    <small style="width: 100%; color: #ffffff !important;" class="text-danger"
+                                        *ngIf="form.controls['password'].hasError('minlength')">
+                                        কমপক্ষে ৪ ডিজিটের পাসওয়ার্ড হতে হবে</small>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Error Message -->
+                            <!-- <div class="form-group" *ngIf="message" style="width: 75%; margin-left: 12.5%;">
+                                <div class="error-message"
+                                    style="color: #ffffff; background: rgba(255, 255, 255, 0.2); 
+                                                padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 14px;">
+                                    {{message}}
+                                </div>
+                            </div> -->
+
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <button class="btn mat-elevation-z6 w-100 btnLogin"
+                                        [disabled]="userForm.form.invalid" type="submit">
+                                        লগইন
+                                        <!-- Loader -->
+                                        <!-- <span class="ouro ouro3" *ngIf="showLoader"
+                                            style="position: absolute; right: 10px;">
+                                            <span class="left"><span class="anim"></span></span>
+                                            <span class="right"><span class="anim"></span></span>
+                                        </span> -->
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Footer -->
+                        <div class="footer-links">
+                            Powered by City Group IT
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- </div>
+                    </div>
+                </div> -->
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div style="height: 100%;">
+    <mat-sidenav-container class="h-100 overlay"
+        style="background: url(./assets/img/citygroup/loginBgnew_V2.jpg); background-repeat: no-repeat; background-size: 100% 100%;">        
+
+        <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 25vh; margin-bottom: 25vh;">
+           
+            <div class="col-md-3 mat-elevation-z6"
+                style="text-align: center;margin-left:25%;margin-right:25%; padding-top: 10px; padding-left: 2%; padding-right: 2%; border-radius: 25px; background-image: radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgba(251,32,86,1) 0%, rgba(135,2,35,1) 90% );">
+
+                <div class="col-md-12" style="display: inline-block; padding: 0px; margin: 0px;">
+                    <div class="">
+                        <div class="" style="color: #ffffff; font-weight: bold; text-align: center; font-size: 25px;">
+                            <i class="fa fa-align-justify"></i>
+                            ভূমি ব্যবস্থাপনা সিস্টেম
+                        </div>
+                        <div class="card-body" style="margin: 0px; padding: 0px;">
+
+                            <div class="col-md-12" style="padding: 0px; margin: 0px;">
+
+                                <div class="container-fluid" style="padding: 10px;">
+
+
+                                    <form #userForm="ngForm" [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+
+
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm mb-3"
+                                                style="width: 75%; margin-left: 12.5%;">
+
+                                                <input id="userid" type="text" aria-label="Small"
+                                                    aria-describedby="inputGroup-sizing-sm" autofocus
+                                                    [(ngModel)]="userModel.user_id" #userid required
+                                                    class="form-control " placeholder="Employee ID...(e.g. 06739)"
+                                                    name="userid" formControlName="userid">
+
+                                                <small style="width: 100%; color: #ffffff !important;"
+                                                    class="text-danger"
+                                                    *ngIf="form.controls['userid'].touched && form.controls['userid'].errors?.required">
+                                                    এ্যামপ্লয়ি আই.ডি অবশ্যই দিতে হবে</small>
+
+                                                <small style="width: 100%; color: #ffffff !important;"
+                                                    class="text-danger"
+                                                    *ngIf="form.controls['userid'].hasError('minlength')">
+                                                    এ্যামপ্লয়ি আই.ডি কমপক্ষে ৫ ডিজিটের হতে হবে </small>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm mb-3"
+                                                style="width: 75%; margin-left: 12.5%;">
+
+                                                <input id="password" type="password" class="form-control"
+                                                    aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                                                    [(ngModel)]="userModel.user_password" #password required
+                                                    name="password" placeholder="Password" formControlName="password">
+
+                                                <small style="width: 100%; color: #ffffff !important;"
+                                                    class="text-danger"
+                                                    *ngIf="form.controls['password'].touched && form.controls['password'].errors?.required">
+                                                    পাসওয়ার্ড অবশ্যই দিতে হবে</small>
+
+                                                <small style="width: 100%; color: #ffffff !important;"
+                                                    class="text-danger"
+                                                    *ngIf="form.controls['password'].hasError('minlength')">
+                                                    কমপক্ষে ৪ ডিজিটের পাসওয়ার্ড হতে হবে</small>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-sm"
+                                                style="width: 75%; margin-left: 12.5%;">
+                                                <button class="btn mat-elevation-z6 w-100"
+                                                    [disabled]="userForm.form.invalid"
+                                                    style="background-image: linear-gradient( 179.7deg,  rgba(197,214,227,1) 2.9%, rgba(144,175,202,1) 97.1% ); color:darkblue; font-weight:bold;"
+                                                    type="submit">লগইন</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-container>
+</div> -->

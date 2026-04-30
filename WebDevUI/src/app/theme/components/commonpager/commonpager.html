@@ -1,0 +1,36 @@
+﻿<div class="p-0" *ngIf="IsPage">
+    <div class="pull-left ">
+        <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
+                class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{totalRows}}</b></span>
+            entries</span>
+    </div>
+    <div class="pull-right">
+        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li>
+                <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pager.currentPage === 1}"
+                    [routerLink]="" (click)="setPagination(1,true)"><i class="fa fa-angle-double-left"
+                        aria-hidden="true"></i>Start</a>
+            </li>
+            <li>
+                <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pager.currentPage === 1}" [routerLink]=""
+                    (click)="setPagination(pager.currentPage - 1,true)"><i class="fa fa-angle-left"
+                        aria-hidden="true"></i>Previous</a>
+            </li>
+            <li *ngFor="let page of pager.pages">
+                <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pager.currentPage === page}"
+                    [routerLink]="" (click)="setPagination(page,true)">{{page}}</a>
+            </li>
+            <li>
+                <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    [routerLink]="" (click)="setPagination(pager.currentPage + 1,true)"><i class="fa fa-angle-right"
+                        aria-hidden="true"></i>Next</a>
+            </li>
+            <li>
+                <a class="btn btn-sm btn-outline-secondary"
+                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}" [routerLink]=""
+                    (click)="setPagination(pager.totalPages,true)"><i class="fa fa-angle-double-right"
+                        aria-hidden="true"></i>End</a>
+            </li>
+        </ul>
+    </div>
+</div>
