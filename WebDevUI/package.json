@@ -41,6 +41,7 @@
     "bootstrap": "^4.5.0",
     "bootstrap-select": "^1.13.18",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "datatables.net": "^1.10.21",
     "datatables.net-dt": "^1.10.21",
     "date-fns": "2.14.0",

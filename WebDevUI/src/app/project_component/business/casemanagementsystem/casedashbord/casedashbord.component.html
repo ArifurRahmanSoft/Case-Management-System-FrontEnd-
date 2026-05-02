@@ -1,3 +1,7 @@
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+
 
 <div class="col-12 p-0 m-0">
     <div class="d-flex justify-content-center p-0 m-0">
@@ -14,7 +18,7 @@
 
 
                 <!-- dashboard.component.html -->
-                <div class="row g-3 ml-1">
+                <!-- <div class="row g-3 ml-1">
                     <div style="text-align: center; height: 80px;"
                         class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg ml-1 p-3 mr-5 mb-5 bg-body-tertiary rounded">
                         <div class="dashboard-card">
@@ -41,7 +45,7 @@
                         </div>
                     </div>
 
-                     <div
+                    <div
                         class="headerDashboard col-lg-2 col-md-6 col-6 shadow-lg p-3 mr-5 mb-5 bg-body-tertiary rounded">
                         <div class="dashboard-card">
                             <h3>{{ totalResolvedCase }}</h3>
@@ -50,9 +54,76 @@
                     </div>
 
 
-                </div>
+                </div> -->
+
+ <div class="row g-3 ml-2 ">
 
 
+    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4  headerDashboardColor ">
+        <div  style="
+          
+            text-align:center;
+            background: linear-gradient(135deg, #4e73df, #224abe);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        "  >
+            <h3 style="margin:0;">{{ totalActiveCase }}</h3>
+            <p style="margin:0; font-size:14px;">চলমান মামলা</p>
+        </div>
+    </div>
+
+   
+    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+        <div  style="
+            text-align:center;
+            background: linear-gradient(135deg, #e74a3b, #c0392b);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+            <h3 style="margin:0;">{{ caseurgentPriorty }}</h3>
+            <p style="margin:0; font-size:14px;">উচ্চ ঝুঁকির মামলা</p>
+        </div>
+    </div>
+
+
+    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+        <div  style="
+            text-align:center;
+            background: linear-gradient(135deg, #1cc88a, #13855c);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+            <h3 style="margin:0;">{{ totalCompany }}</h3>
+            <p style="margin:0; font-size:14px;">মামলাযুক্ত কোম্পানির সংখ্যা</p>
+        </div>
+    </div>
+
+
+    <div class="col-lg-2  col-md-6 col-6 p-2 headerDashboardColor">
+        <div style="
+            text-align:center;
+            background: linear-gradient(135deg, #f6c23e, #dda20a);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+            <h3 style="margin:0;">{{ totalResolvedCase }}</h3>
+            <p style="margin:0; font-size:14px;">স্থগিত মামলা</p>
+        </div>
+    </div>
+
+</div> 
 
 
 
@@ -88,7 +159,7 @@
                                         <th style="padding:10px; border:1px solid #ddd; text-align:center;">কোর্ট</th>
                                         <th style="padding:10px; border:1px solid #ddd; text-align:center;">থানা</th>
                                         <th style="padding:10px; border:1px solid #ddd; text-align:center;">মৌজা</th>
-                                        
+
                                     </tr>
                                 </thead>
 
@@ -104,15 +175,19 @@
                                             {{ hr.caseno }}
                                         </td>
 
-                                        <td
+                                        <!-- <td
                                             style="padding:10px; border:1px solid #eee; color:#2e59d9; font-weight:500;">
+                                            {{ hr.hearing_date | date:'dd-MMM-yy' }}
+                                        </td> -->
+
+                                        <td [ngStyle]="{ 'padding': '10px','border': '1px solid #eee', 'font-weight': '500', 'color': getHearingColor(hr.hearing_date) }">
                                             {{ hr.hearing_date | date:'dd-MMM-yy' }}
                                         </td>
 
                                         <td style=" padding:10px; border:1px solid #eee;">
                                             {{ hr.courtName }}
                                         </td>
-                                          <td style="padding:10px; border:1px solid #eee;">
+                                        <td style="padding:10px; border:1px solid #eee;">
                                             {{ hr.thanaName }}
                                         </td>
 
@@ -120,7 +195,7 @@
                                             {{ hr.mouzaName }}
                                         </td>
 
-                                      
+
 
                                     </tr>
 
@@ -150,11 +225,14 @@
                     </div>
 
                     <!-- GRAPH 3: DOCUMENT PROGRESS -->
-                    <div class="card"> <div class="card-title" style="background:linear-gradient(90deg,#4e73df,#224abe); color:#fff;
+                      <div class="card">
+                        <div class="card-title" style="background:linear-gradient(90deg,#4e73df,#224abe); color:#fff;
                      padding:12px 15px; font-size:16px; font-weight:600;"> 🚨 মামলার প্রায়োরিটি
                         </div>
                         <canvas id="documentChart"></canvas>
-                    </div>
+                    </div>  
+
+
 
                     <!-- 4. MUTATION WISE LAND -->
                     <div class="card ">

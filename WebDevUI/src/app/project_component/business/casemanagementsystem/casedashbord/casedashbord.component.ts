@@ -14,6 +14,7 @@ import { Chart } from 'chart.js';
 import { DataService } from '../../../../api/api.dataservice.service';
 
 
+
 @Component({
   selector: 'app-casedashbord',
   templateUrl: './casedashbord.component.html',
@@ -34,12 +35,16 @@ export class CaseDashbordComponent implements OnInit {
   public res: any;
   public pageSize: number = 10;
   public today: string = '';
-  public entryMenuList: any = [];
-  public entryMenuId: string = 'T_LAND_DEED';
-  public entryOperatorList: any = [];
-  public entryOperatorId: string = '';
   public options: Options;
   private updateSubscription: Subscription;
+    public caeCompany: any;
+  public casePriorty: any;
+  public caserecentHearingList: any;
+  public caseStatus: any
+  public totalActiveCase: number = 0;
+  public totalResolvedCase: number = 0;
+  public totalCompany: number = 0;
+  public caseurgentPriorty: number = 0;
   //public displayStart = 0;
   public isLoaded: Object = true;
   constructor(
@@ -88,17 +93,9 @@ export class CaseDashbordComponent implements OnInit {
 
 
   public _getcaseDash: string = 'case/getcasedashbord';
-  public caeCompany: any;
-  public casePriorty: any;
-  public caserecentHearingList: any;
-  public caseStatus: any
-  public totalActiveCase: number = 0;
-  public totalResolvedCase: number = 0;
-  public totalCompany: number = 0;
-  public caseurgentPriorty: number = 0;
   getCaseDahbord() {
     debugger;
-    var userId = '08427';
+    var userId = '';
     var param = { strId: this.userID };
     var apiUrl = this._getcaseDash
     this._dataservice.getbyid(apiUrl, userId)
@@ -109,12 +106,13 @@ export class CaseDashbordComponent implements OnInit {
         this.caseStatus = dashboard.status
         this.caeCompany = dashboard.company
         this.casePriorty = dashboard.priority
-        this.caserecentHearingList = dashboard.recent_hearings
-        const active = this.caseStatus.find(x => x.name === 'চলমান');
+        this.caserecentHearingList = dashboard.recent_hearings;
+       
+        const active = this.caseStatus.find(x => x.caseStatusOid === '2');
         this.totalActiveCase = active ? active.total : 0;
-        const urgentCase = this.casePriorty.find(x => x.name === 'উচ্চ ঝুঁকি');
+        const urgentCase = this.casePriorty.find(x => x.priorityOid === '2');
         this.caseurgentPriorty = urgentCase ? urgentCase.total : 0;
-        const resolved = this.caseStatus.find(x => x.name === 'স্থগিত');
+        const resolved = this.caseStatus.find(x => x.caseStatusOid === '3');
         this.totalResolvedCase = resolved ? resolved.total : 0;
 
 
@@ -178,9 +176,9 @@ export class CaseDashbordComponent implements OnInit {
             data: this.casePriorty.map(x => x.total),
             backgroundColor: [
               '#4CAF50',
+               '#f10808',
               '#03A9F4',
               '#FFC107',
-              '#f10808',
               '#9C27B0',
               '#FF5722'
             ]
@@ -196,6 +194,33 @@ export class CaseDashbordComponent implements OnInit {
       }
     });
   }
+
+
+
+
+
+
+  getHearingColor(date: string): string {
+  if (!date) return '';
+
+  const today = new Date();
+  const hearingDate = new Date(date);
+
+  // Remove time part for accurate comparison
+  today.setHours(0, 0, 0, 0);
+  hearingDate.setHours(0, 0, 0, 0);
+
+  const diffTime = hearingDate.getTime() - today.getTime();
+  const diffDays = diffTime / (1000 * 3600 * 24);
+
+  if (diffDays >= 0 && diffDays <= 3) {
+    return 'red'; // Today to next 3 days
+  } else if (diffDays >= 4 && diffDays <= 7) {
+    return 'orange'; // 4–7 days
+  } else {
+    return 'green'; // greater than 7 days
+  }
+}
   //========================>>>>>>>>>>>===============END HERE ================================================
 
 
