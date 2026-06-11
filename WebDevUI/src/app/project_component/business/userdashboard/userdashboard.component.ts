@@ -13,6 +13,17 @@ import { AppSettings } from 'src/app/app.settings';
 import { Chart } from 'chart.js';
 
 
+
+export interface LandNode {
+  name: string;
+  deedQnty: number;
+  totalLand: number;
+  level: 'district' | 'thana' | 'mouza';
+  expanded?: boolean;
+  children?: LandNode[];
+}
+
+
 @Component({
   selector: 'app-userdashboard',
   templateUrl: './userdashboard.component.html',
@@ -23,6 +34,8 @@ export class UserDashboardComponent implements OnInit {
   @ViewChild('cmnsrv', { static: false }) _msg: CommonService;
   @ViewChild('cmnpager', { static: false }) _pg: CommonPager;
   //npm install chart.js@2.9.4 ng2-charts@2.4.2 --save
+  landData: LandNode[] = [];
+  landDatas1: LandNode[] = [];
 
 
   public settings: Settings;
@@ -57,29 +70,26 @@ export class UserDashboardComponent implements OnInit {
     this.today = _conversion.Today();
   }
 
+
+
+
+
+  toggle(node: LandNode) {
+    node.expanded = !node.expanded;
+  }
   ngOnInit(): void {
-
-// this.calculateTotalLand();
-//  this.prepareChartData();
-
 
     this.loadCategoryChart();
     this.loadDocumentProgressChart();
     this.getAllLandCategory();
     this.loadMutationChart();
 
+    this.getareaWiseList()
+    this.getDeedDashbord()
 
 
 
 
-
-
-
-
-
-
-    debugger;
-    //this.getAllDashboardMain();
     this.getEntryMenu();
     this.getOperatorById(this.entryMenuId);
     this.getAllUserActivity();
@@ -246,149 +256,82 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-  ////========================>>>>>>>>>>>===============START HERE ================================================
-//   totalTax=50;
-//   pendingTax=20;
-//   typeBaseLandQnty=[
-//     {type:'type1',qntaty:100},
-//     {type:'type2',qntaty:500},
-//     {type:'type3',qntaty:800},
-//     {type:'type4',qntaty:10},
-//     {type:'type5',qntaty:80},
-//     {type:'type6',qntaty:300},
-//     {type:'type7',qntaty:5000},
-//   ]
-//   landList=[
-//     {landId:1,quantity:10},
-//     {landId:2,quantity:20},
-//     {landId:3,quantity:10},
-//     {landId:4,quantity:110},
-
-//   ]
-//   public totalLandQuntaty:number=0;
-
-// calculateTotalLand(){
-//   this.totalLandQuntaty=this.landList.reduce((sum,item)=>sum+item.quantity,0);
-//   console.log("this.totalLandQuntaty",this.typeBaseLandQnty)
-// }
 
 
 
 
-//   landData = [
-//     { type: 'Agriculture', quantity: 50 },
-//     { type: 'Residential', quantity: 20 },
-//     { type: 'Commercial', quantity: 12 },
-//     { type: 'business', quantity: 18 }
-//   ];
+  public landCategoryId: string = '';
+  public landCategoryList: any = [];
+  public _getLandCategoryUrl: string = 'dropdown/getalllandcategories';
+  getAllLandCategory() {
+    debugger;
+    const quantityMaps: any = { '1': 200, '2': 500, '3': 300, '4': 400, '5': 100, '6': 800, '7': 20 };
+    var list: Array<{ id: string, text: string, quantity?: number }> = [{ id: '', text: "অনুগ্রহ করে নির্বাচন করুন" }];
+    var param = { strId: '' };
+    var apiUrl = this._getLandCategoryUrl;
+    this._dataservice.getWithMultipleModel(apiUrl, param)
+      .subscribe(response => {
+        this.res = response;
 
+        if (this.res.resdata.listLandCategories != '') {
+          var itemList = this.res.resdata.listLandCategories;
+          itemList.forEach(item => {
+            list.push({ id: item.categoryId.toString(), text: item.categoryName, quantity: quantityMaps[item.categoryId] });
+          });
 
-//   public pieChartLabels: string[] = [];
-//   public pieChartData: number[] = [];
-//   public pieChartType = 'pie';
-//   public pieChartOptions = {
-//     responsive: true
-//   };
-
-
-//   prepareChartData(): void {
-//     debugger
-//     this.pieChartLabels = this.landData.map(item => item.type);
-//     this.pieChartData = this.landData.map(item => item.quantity);
-//   }
-
-
-
-    public landCategoryId: string = '';
-    public landCategoryList: any = [];
-    public _getLandCategoryUrl: string = 'dropdown/getalllandcategories';
-    getAllLandCategory() {
-        debugger;
-         const quantityMaps:any={'1':200,'2':500,'3':300,'4':400,'5':100,'6':800,'7':20};
-        var list: Array<{ id:string, text:string,quantity?:number }> = [{ id: '', text: "অনুগ্রহ করে নির্বাচন করুন" }];
-        var param = { strId: '' };
-        var apiUrl = this._getLandCategoryUrl;
-        this._dataservice.getWithMultipleModel(apiUrl, param)
-            .subscribe(response => {
-                this.res = response;
-               
-                if (this.res.resdata.listLandCategories != '') {
-                    var itemList = this.res.resdata.listLandCategories;
-                    itemList.forEach(item => {
-                        list.push({ id: item.categoryId.toString(), text: item.categoryName,quantity:quantityMaps[item.categoryId] });
-                    });
-
-                    this.landCategoryList = list;
-                     console.log(" this.landCategoryList", this.landCategoryList)
-                     this.loadCategoryChart();
-                }
-            }, error => {
-                console.log(error);
-            });
-    }
-
- totalLand = 5000; // acre
-
- loadCategoryChart() {
-
-  const filteredList = this.landCategoryList.filter(x => x.id !== '');
-
-  const labels = filteredList.map(item => item.text);
-  const data = filteredList.map(item => item.quantity || 0);
-
-  const backgroundColors = this.generateColors(filteredList.length);
-
-  new Chart('categoryChart', {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: backgroundColors
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom'
+          this.landCategoryList = list;
+          console.log(" this.landCategoryList", this.landCategoryList)
+          this.loadCategoryChart();
         }
-      }
-    }
-  });
-}
-
-generateColors(count: number): string[] {
-  const colors: string[] = [];
-
-  for (let i = 0; i < count; i++) {
-    colors.push(
-      `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
-    );
+      }, error => {
+        console.log(error);
+      });
   }
 
-  return colors;
-}
+  totalLand = 5000; // acre
+
+  loadCategoryChart() {
+
+    const filteredList = this.landCategoryList.filter(x => x.id !== '');
+
+    const labels = filteredList.map(item => item.text);
+    const data = filteredList.map(item => item.quantity || 0);
+
+    const backgroundColors = this.generateColors(filteredList.length);
+
+    new Chart('categoryChart', {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColors
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+
+  generateColors(count: number): string[] {
+    const colors: string[] = [];
+
+    for (let i = 0; i < count; i++) {
+      colors.push(
+        `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+      );
+    }
+
+    return colors;
+  }
 
 
-  // loadCategoryChart() {
-  //   new Chart('categoryChart', {
-  //     type: 'pie',
-  //     data: {
-  //       labels: ['Agriculture', 'Economic Zone', 'Residential', 'Others'],
-  //       datasets: [{
-  //         data: [500, 300, 200, 100],
-  //         backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#9C27B0']
-  //       }]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       legend: {
-  //         position: 'bottom'
-  //       }
-  //     }
-  //   });
-  // }
 
   loadDocumentProgressChart() {
     new Chart('documentChart', {
@@ -431,7 +374,7 @@ generateColors(count: number): string[] {
     { type: 'Water Body', quantity: 60 }
   ];
 
-    loadMutationChart() {
+  loadMutationChart() {
     new Chart('mutationChart', {
       type: 'bar',
       data: {
@@ -468,6 +411,207 @@ generateColors(count: number): string[] {
 
 
   //========================>>>>>>>>>>>===============END HERE ================================================
+
+
+
+  public _getcAreaWiseLand: string = 'case/getdashbordbyarea';
+  getareaWiseList() {
+    debugger;
+    var userId = '';
+    var param = { strId: this.userID };
+    var apiUrl = this._getcAreaWiseLand
+    this._dataservice.getbyid(apiUrl, userId)
+      .subscribe(response => {
+        this.res = response;
+        const caseList = JSON.parse(this.res.resdata.caseList);
+        const dashboard = JSON.parse(caseList[0].DASHBOARD_JSON);
+        this.landData = this.mapLandHierarchy(dashboard.landHierarchy);;
+        console.log("this is low oe", this.landData)
+
+      }, error => {
+        console.log(error);
+      });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  hovered: any = null;
+  private mapLandHierarchy(data: any[], level: string = 'district'): any[] {
+    return data.map(item => {
+      return {
+        name: item.name,
+        deedQnty: item.deedQnty,
+        //totalLand: item.totalLand,
+        totalLand: this._conversion.convertAjutansha(item.totalLand),
+        level: level,
+        expanded: false,
+        children: item.children
+          ? this.mapLandHierarchy(this.addLevel(item.children, level), this.nextLevel(level))
+          : []
+      };
+    });
+  }
+
+  // optional helper to set intermediate level
+  private addLevel(children: any[], parentLevel: string) {
+    return children.map(c => ({
+      ...c,
+      level: this.nextLevel(parentLevel)
+    }));
+  }
+
+  // define hierarchy levels
+  private nextLevel(level: string): string {
+    switch (level) {
+      case 'district': return 'thana';
+      case 'thana': return 'mouza';
+      default: return 'mouza';
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  public landByCatagory: any;
+  public landByProject: any;
+  public totalLands: any;
+  public totalMortgageLand: any;
+  public unRegisterLand: any;
+  public totalKhajna: any;
+  public totalMutation: any;
+  public dashboards:any;
+  public _getDeedDash: string = 'case/getdeeddashbord';
+  getDeedDashbord() {
+    debugger;
+    var userId = '';
+    var param = { strId: this.userID };
+    var apiUrl = this._getDeedDash
+    this._dataservice.getbyid(apiUrl, userId)
+      .subscribe(response => {
+        this.res = response;
+        const dashList = JSON.parse(this.res.resdata.deedDashbordList);
+        const dashboard = JSON.parse(dashList[0].DASHBOARD_JSON);
+        this.dashboards=dashboard;
+        this.landByProject=dashboard.landByProject;
+        this.landByCatagory=dashboard.landByCatagory;
+        this.totalLands=this._conversion.convertAjutansha(dashboard.totalLand.ttlland); 
+        console.log("this.totalLands",this.totalLands)
+        this.totalMortgageLand=this._conversion.convertAjutansha(dashboard.totalLand.mortgageLand); 
+        this.unRegisterLand=dashboard.totalLand.unRegisterLand; 
+        this.totalKhajna=dashboard.totalKhajna;
+        this.totalMutation=dashboard.totalMutation;
+        console.log("this is low dashboard", dashboard)
+        this.loadLandByProjectChart();
+
+      }, error => {
+        console.log(error);
+      });
+  }
+
+
+
+  // loadLandByProjectChart() {
+  //   debugger
+
+  //   if (!this.landByProject?.length) return;
+
+  //   const canvas = document.getElementById('projectChart') as HTMLCanvasElement;
+  //   console.log("total candvas sis ",canvas)
+
+  //   if (!canvas) return;
+
+  //   new Chart(canvas, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: this.landByProject.map(x => x.name),
+  //       datasets: [
+  //         {
+  //           label: 'Total Land',
+  //           data: this.landByProject.map(x => x.toalLand),
+  //           backgroundColor: '#42A5F5'
+  //         }
+  //       ]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       legend: { display: false }
+  //     }
+  //   });
+  // }
+
+
+
+
+  
+
+  loadLandByProjectChart() {
+    debugger
+
+    if (!this.landByProject?.length) return;
+
+    const canvas = document.getElementById('projectChart') as HTMLCanvasElement;
+    console.log("total candvas sis ",canvas)
+
+    if (!canvas) return;
+
+   new Chart(canvas, {
+  type: 'bar',
+  data: {
+    labels: this.landByProject.map(x => x.name),
+    datasets: [
+      {
+        label: 'জমি',
+        data: this.landByProject.map(x => {
+          const land = this._conversion.convertAjutansha(x.toalLand);
+          return land.maxValue;
+        }),
+        backgroundColor: '#42A5F5'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    legend: {
+      display: false
+    },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data) => {
+
+          const project = this.landByProject[tooltipItem.index!];
+          const land = this._conversion.convertAjutansha(project.toalLand);
+
+          return [
+            `জমি: ${land.maxValue} ${land.maxUnit}`,
+            `দলিল: ${project.totalDeed}`
+          ];
+        }
+      }
+    }
+  }
+});
+  }
+
+
+
+
 
 
 

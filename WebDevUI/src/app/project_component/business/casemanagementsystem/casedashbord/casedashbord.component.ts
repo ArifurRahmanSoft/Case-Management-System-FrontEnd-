@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { Conversion } from '../../../../api/api.conversion.service';
@@ -12,6 +12,8 @@ import { Settings } from 'src/app/app.settings.model';
 import { AppSettings } from 'src/app/app.settings';
 import { Chart } from 'chart.js';
 import { DataService } from '../../../../api/api.dataservice.service';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+
 
 
 
@@ -47,10 +49,18 @@ export class CaseDashbordComponent implements OnInit {
   public caseurgentPriorty: number = 0;
   //public displayStart = 0;
   public isLoaded: Object = true;
+      public district: string = '';
+    public thana: string = '';
+    public mouza: string = '';
+    public court: string = '';
+    public caseCstatus: string = '';
+    public casePriority: string = ''
+
   constructor(
     public appSettings: AppSettings,
     private _conversion: Conversion,
     private _dataservice: DataService,
+    public dialog: MatDialog,
     private _pathValidation: pathValidation,
     private formBuilder: FormBuilder,
     @Inject(DOCUMENT) private document: any) {
@@ -106,6 +116,7 @@ export class CaseDashbordComponent implements OnInit {
         this.caseStatus = dashboard.status
         this.caeCompany = dashboard.company
         this.casePriorty = dashboard.priority
+        console.log("case prioriy is ",this.casePriorty, dashboard.priority)
         this.caserecentHearingList = dashboard.recent_hearings;
        
         const active = this.caseStatus.find(x => x.caseStatusOid === '2');
@@ -161,6 +172,35 @@ export class CaseDashbordComponent implements OnInit {
   }
 
 
+
+
+
+
+  getHearingColor(date: string): string {
+  if (!date) return '';
+
+  const today = new Date();
+  const hearingDate = new Date(date);
+
+  // Remove time part for accurate comparison
+  today.setHours(0, 0, 0, 0);
+  hearingDate.setHours(0, 0, 0, 0);
+
+  const diffTime = hearingDate.getTime() - today.getTime();
+  const diffDays = diffTime / (1000 * 3600 * 24);
+
+  if (diffDays >= 0 && diffDays <= 3) {
+    return 'red'; // Today to next 3 days
+  } else if (diffDays >= 4 && diffDays <= 7) {
+    return 'orange'; // 4–7 days
+  } else {
+    return 'green'; // greater than 7 days
+  }
+}
+
+
+
+
   loadCasePriorityChart() {
 
     if (!this.casePriorty || this.casePriorty.length === 0) {
@@ -199,30 +239,106 @@ export class CaseDashbordComponent implements OnInit {
 
 
 
-
-  getHearingColor(date: string): string {
-  if (!date) return '';
-
-  const today = new Date();
-  const hearingDate = new Date(date);
-
-  // Remove time part for accurate comparison
-  today.setHours(0, 0, 0, 0);
-  hearingDate.setHours(0, 0, 0, 0);
-
-  const diffTime = hearingDate.getTime() - today.getTime();
-  const diffDays = diffTime / (1000 * 3600 * 24);
-
-  if (diffDays >= 0 && diffDays <= 3) {
-    return 'red'; // Today to next 3 days
-  } else if (diffDays >= 4 && diffDays <= 7) {
-    return 'orange'; // 4–7 days
-  } else {
-    return 'green'; // greater than 7 days
-  }
-}
   //========================>>>>>>>>>>>===============END HERE ================================================
+getCaseListByParam(caseCstatus:string,priority:string){
+  debugger
+  this.casePriority=priority;
+  this.caseCstatus=caseCstatus
 
+  this.getListByPage(this.pageSize)
+}
+
+
+   public responseTag: string = 'listCase';
+    public caseList: any = [];
+    public _listByPageUrl: string = 'case/getbypage';
+
+    getListByPage(pageSize) {
+        debugger
+        setTimeout(() => {
+            this._pg.getListByPage(1, true, pageSize);
+            setTimeout(() => {
+            }, 300);
+        }, 0);
+    }
+
+    sendToList(ev) {
+        debugger
+        this.caseList = ev;
+        setTimeout(() => {
+        }, 300);
+    }
+
+
+ @ViewChild('modalEntry') modalEntry: TemplateRef<any>;
+  private _dialogRef: MatDialogRef<TemplateRef<any>>;
+  public modalType: string = '';
+  public modalControlName: string = '';
+  public modalLabelName: string = '';
+  openModalEntryDialog(modaltype): void {
+   
+    debugger
+    const _config = new MatDialogConfig();
+    _config.restoreFocus = false;
+    _config.autoFocus = false;
+    _config.role = 'dialog';
+       _config.width = '80%';
+
+    // if (modaltype == 'caseModal') {
+    //   _config.width = '80%';
+
+    // }
+    // if (modaltype != 'caseModal') {
+    //   _config.width = '40%';
+    //   _config.panelClass = 'modalTopPosition';
+    // }
+
+
+
+    this.modalType = modaltype;
+    this.modalControlName = modaltype;
+    modaltype != '' ? this.createModalForm(modaltype) : null;
+
+    this._dialogRef = this.dialog.open(this.modalEntry, _config);
+
+    this._dialogRef.afterClosed().subscribe(result => {
+      this.resetModal();
+    });
+  }
+
+
+  //create modal
+  public modalForm: FormGroup;
+  public bassetTypeForm: FormGroup;
+  createModalForm(modalName) {
+    debugger
+    this.modalForm = new FormGroup({});
+
+    switch (modalName) {
+
+      case 'WorkOrder':
+        this.modalLabelName = 'Quotation';
+        this.modalForm  = new FormGroup({
+          bassetTypeId: new FormControl(null),
+          bassetTypeCode: new FormControl(null),
+          bassetTypeName: new FormControl(null, Validators.required),
+          bassetTypeSName: new FormControl(null),
+           approvalNote: new FormControl(null),
+          selectedApprovalOption: new FormControl(null, Validators.required),
+          //categoryId: new FormControl(this.jobPostForm.controls.post.value, Validators.required),
+          isActive: new FormControl(true)
+        });
+
+
+        break;
+
+
+    }
+  }
+
+  resetModal() {
+    this.modalForm = new FormGroup({});
+  }
 
 
 

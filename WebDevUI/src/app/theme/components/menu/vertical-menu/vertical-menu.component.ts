@@ -37,6 +37,7 @@ export class VerticalMenuComponent implements OnInit {
   }
 
   toggleParentChildMenu(pmenu, menu, pmel, cmel) {
+    debugger
     var ppmel = pmel + menu.menuId.toString();
     var pcmel = cmel + menu.menuId.toString();
     let menuItem = document.getElementById(ppmel);
@@ -56,6 +57,7 @@ export class VerticalMenuComponent implements OnInit {
   }
 
   closeOtherChildMenus(menuList, menuId, pmel, cmel) {
+    debugger
     var hasChildList = menuList.filter(x => x.ChildMenues.length > 0 && x.menuId != menuId);
     if (hasChildList) {
       hasChildList.forEach(item => {

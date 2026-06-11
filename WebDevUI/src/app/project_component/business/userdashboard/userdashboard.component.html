@@ -1,72 +1,277 @@
-<!-- <div class="dashboard-card">
-  <h3>Total Land Quantity</h3>
-  <h1>{{ totalLandQuntaty }}</h1>
-</div>
-
-<div style="display: block; width: 400px; margin: auto;">
-  <canvas baseChart
-          [data]="pieChartData"
-          [labels]="pieChartLabels"
-          [chartType]="pieChartType"
-          [options]="pieChartOptions">
-  </canvas>
-</div> -->
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 
 
 
 <div class="col-12 p-0 m-0">
-    <div class="d-flex justify-content-center p-0 m-0">
-        <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
+  <div class="d-flex justify-content-center p-0 m-0">
+    <div class="col-12 pl-0 pr-0 pb-0 pt-1 m-0" style="background-color: #fff;">
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card "
-                style="border: 1px solid #ccc;">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 m-0 card " style="border: 1px solid #ccc;">
 
-                <div class="col-md-12 card-header"
-                    style="border: 1px solid #ccc; background-color: #3B82F6; text-align: center; color: #fff;">
-                    <h1><mat-icon>dashboard</mat-icon> Management Dashboard Features </h1>
-                </div>
-                <br>
-
-
-                <div class="dashboard">
-
-                    <!-- GRAPH 1: TOTAL LAND HOLDING -->
-                    <div class="card">
-                        <div class="card-title">Total Land Holding</div>
-
-                        <div class="land-box">
-                            <!-- <img src="'./assets/img/app/lms1.png'" alt="Land" /> -->
-                            <img [src]="'./assets/img/app/total_land.webp'">
-                            <h2>{{ totalLand }} Acre</h2>
-                        </div>
-                    </div>
-
-                    <!-- GRAPH 2: CATEGORY DISTRIBUTION -->
-                    <div class="card">
-                        <div class="card-title">Category Distribution</div>
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-
-                    <!-- GRAPH 3: DOCUMENT PROGRESS -->
-                    <div class="card">
-                        <div class="card-title">Document Progress</div>
-                        <canvas id="documentChart"></canvas>
-                    </div>
-
-                    <!-- 4. MUTATION WISE LAND -->
-                    <div class="card ">
-                        <div class="card-title">Mutation Wise Land</div>
-                        <canvas id="mutationChart"></canvas>
-                    </div> 
-
-                </div>
-
-            </div>
+        <div class="col-md-12 card-header"
+          style="border: 1px solid #ccc; background-color: #3B82F6; text-align: center; color: #fff;">
+          <h5> <i class="fas fa-map-marker-alt"></i>ল্যান্ড ম্যানেজমেন্ট সিস্টেম ড্যাশবোর্ড </h5>
         </div>
+        <br>
+
+
+
+
+        <div class="row g-3 ml-2 ">
+
+
+          <div class="tooltip-cell" (mouseenter)="hovered = toolTotalLand" (mouseleave)="hovered = null"
+            class="col-lg-2  col-md-6 col-6 p-2 mr-4  headerDashboardColor ">
+            <div style="
+            text-align:center;
+            background: linear-gradient(135deg, #4e73df, #224abe);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+              <h3 style="margin:0;">
+                {{ totalLands?.maxValue }}
+                <div style="left: 30px; top: -20px;" class="custom-tooltip" *ngIf="hovered === toolTotalLand">
+                  {{totalLands.acre}} একর, {{totalLands.bigha}} বিঘা ,
+                  {{totalLands.katha}} কাঠা , {{totalLands.shotok}} শতক
+                </div>
+              </h3>
+              <span style="margin:0; font-size:14px;">মোট জমি (একর) </span>
+            </div>
+          </div>
+
+
+          <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+            <div style="
+            text-align:center;
+            background: linear-gradient(135deg, #e74a3b, #c0392b);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+              <h3 style="margin:0;">{{ dashboards?.totalLand.ttlDeed }}</h3>
+              <p style="margin:0; font-size:14px;">মোট দলিল</p>
+            </div>
+          </div>
+
+
+          <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+            <div style="
+            text-align:center;
+            background: linear-gradient(135deg, #1cc88a, #13855c);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">    
+              
+              <h3 style="margin:0;">{{ dashboards?.totalLand.mortgageDeed }} দলিল  </h3>
+              <h4 style="margin:0;"> {{ totalMortgageLand?.maxValue }} একর</h4>
+              <p style="margin:0; font-size:14px;">বন্ধক জমি</p>
+            </div>
+          </div>
+
+
+          <div class="col-lg-2  col-md-6 col-6 p-2 headerDashboardColor">
+            <div style="
+            text-align:center;
+            background: linear-gradient(135deg, #f6c23e, #dda20a);
+            color: white;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding-top:10px;
+        ">
+              <!-- <h3 style="margin:0;">{{ totalResolvedCase }}</h3> -->
+                <h3 style="margin:0;">{{ dashboards?.totalLand.mortgageDeed }} দলিল  </h3>
+              <h4 style="margin:0;"> {{ totalMortgageLand?.maxValue }} একর</h4>
+              <p style="margin:0; font-size:14px;">অনিবন্ধিত জমি</p>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+        <div class="dashboard">
+
+
+          <div class="card ">
+            <div style=" background:linear-gradient(90deg,#4e73df,#224abe); padding:2px 0px;
+             font-weight:600; font-size:16px;color:#fff;" class="card-title">🏡 এরিয়া অনুযায়ী জমি</div>
+
+
+
+            <div class="card land-card">
+
+              <div class="card-body p-0 land-table-wrapper">
+
+                <table class="table table-bordered table-hover mb-0 land-table">
+
+                  <thead style="background-color: #3B82F6;">
+                    <tr>
+                      <th width="170">নাম</th>
+                      <th width="100">দলিল </th>
+                      <th width="200">মোট জমি</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <ng-container *ngFor="let district of landData">
+
+
+                      <tr style="border: 5px solid white;" class="district-row .border-10">
+
+                        <td style="text-align: left;" class="">
+                          <span *ngIf="district.children?.length" (click)="toggle(district)" class="toggle-btn">
+                            {{ district.expanded ? '▼' : '▶' }}
+                          </span>
+
+                          {{ district.name }}
+                        </td>
+
+                        <td>{{ district.deedQnty }}</td>
+                        <!-- <td>{{ district.totalLand.maxValue}} {{district.totalLand.maxUnit}}</td> -->
+                        <td class="tooltip-cell" (mouseenter)="hovered = district" (mouseleave)="hovered = null">
+
+                          {{ district.totalLand.maxValue }}
+                          {{district.totalLand.maxUnit}}
+
+                          <div class="custom-tooltip" *ngIf="hovered === district">
+                            {{district.totalLand.acre}} একর, {{district.totalLand.bigha}} বিঘা ,
+                            {{district.totalLand.katha}} কাঠা , {{district.totalLand.shotok}} শতক
+                          </div>
+                        </td>
+
+                      </tr>
+
+
+                      <ng-container *ngIf="district.expanded">
+
+                        <ng-container *ngFor="let thana of district.children">
+
+                          <tr class="thana-row">
+
+                            <td style="text-align: left;" class="level-1">
+                              <span *ngIf="thana.children?.length" (click)="toggle(thana)" class="toggle-btn">
+                                {{ thana.expanded ? '▼' : '▶' }}
+                              </span>
+
+                              {{ thana.name }}
+                            </td>
+
+                            <td>{{ thana.deedQnty }}</td>
+                            <!-- <td>{{ district.totalLand.thana}} {{district.totalLand.thana}}</td> -->
+                            <td class="tooltip-cell" (mouseenter)="hovered = thana" (mouseleave)="hovered = null">
+
+                              {{ thana.totalLand.maxValue }}
+                              {{thana.totalLand.maxUnit}}
+
+                              <div class="custom-tooltip" *ngIf="hovered === thana">
+                                {{thana.totalLand.acre}} একর, {{thana.totalLand.bigha}}
+                                বিঘা ,
+                                {{thana.totalLand.katha}} কাঠা ,
+                                {{thana.totalLand.shotok}} শতক
+                              </div>
+                            </td>
+
+                          </tr>
+
+
+                          <ng-container *ngIf="thana.expanded">
+
+                            <tr *ngFor="let mouza of thana.children" class="mouza-row">
+
+                              <td style="text-align: left;" class="level-2">
+                                ◉ {{ mouza.name }}
+                              </td>
+
+                              <td>{{ mouza.deedQnty }}</td>
+                              <!-- <td>{{ mouza.totalLand.thana}} {{mouza.totalLand.thana}}</td> -->
+                              <td class="tooltip-cell" (mouseenter)="hovered = mouza" (mouseleave)="hovered = null">
+
+                                {{ mouza.totalLand.maxValue }}
+                                {{mouza.totalLand.maxUnit}}
+
+                                <div class="custom-tooltip" *ngIf="hovered === mouza">
+                                  {{mouza.totalLand.acre}} একর,
+                                  {{mouza.totalLand.bigha}} বিঘা ,
+                                  {{mouza.totalLand.katha}} কাঠা ,
+                                  {{mouza.totalLand.shotok}} শতক
+                                </div>
+                              </td>
+
+                            </tr>
+
+                          </ng-container>
+
+                        </ng-container>
+
+                      </ng-container>
+
+                    </ng-container>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- GRAPH 2: CATEGORY DISTRIBUTION -->
+          <div class="card card-single">
+            <div class="card-title">Category Distribution</div>
+            <canvas id="categoryChart"></canvas>
+          </div>
+
+          <!-- GRAPH 3: DOCUMENT PROGRESS -->
+          <div class="card">
+            <div class="card-title">Document Progress</div>
+            <canvas id="documentChart"></canvas>
+          </div>
+
+          <!-- 4. MUTATION WISE LAND -->
+          <div class="card ">
+            <div class="card-title">Mutation Wise Land</div>
+            <canvas id="projectChart"></canvas>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+      </div>
     </div>
+  </div>
 </div>
-
-
-                    

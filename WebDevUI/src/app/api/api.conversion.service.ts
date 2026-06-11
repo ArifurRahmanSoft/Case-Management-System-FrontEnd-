@@ -1025,4 +1025,80 @@ export class Conversion {
 
     }
 
+
+//LAND CONVRSION OZUTANGSHO TO ACOR,BIGHA,KATHA,SHOTOK
+// convertAjutansha(ayutansha: number) {
+    
+
+//   const SHOTOK_PER_ACRE = 100;
+//   const SHOTOK_PER_BIGHA = 33;
+//   const SHOTOK_PER_KATHA = 1.65;
+
+//   let shotok = ayutansha / 100;
+
+//   const acre = Math.floor(shotok / SHOTOK_PER_ACRE);
+//   shotok = shotok % SHOTOK_PER_ACRE;
+
+//   const bigha = Math.floor(shotok / SHOTOK_PER_BIGHA);
+//   shotok = shotok % SHOTOK_PER_BIGHA;
+
+//   const katha = Math.floor(shotok / SHOTOK_PER_KATHA);
+//   shotok = shotok % SHOTOK_PER_KATHA;
+
+//   return {
+//     acre,
+//     bigha,
+//     katha,
+//     shotok: Number(shotok.toFixed(2)) 
+//   };
+// }
+
+convertAjutansha(ayutansha: number) {
+
+  const SHOTOK_PER_ACRE = 100;
+  const SHOTOK_PER_BIGHA = 33;
+  const SHOTOK_PER_KATHA = 1.65;
+
+  let shotok = ayutansha / 100;
+
+  const acre = Math.floor(shotok / SHOTOK_PER_ACRE);
+  shotok = shotok % SHOTOK_PER_ACRE;
+
+  const bigha = Math.floor(shotok / SHOTOK_PER_BIGHA);
+  shotok = shotok % SHOTOK_PER_BIGHA;
+
+  const katha = Math.floor(shotok / SHOTOK_PER_KATHA);
+  shotok = shotok % SHOTOK_PER_KATHA;
+
+  let maxUnit = '';
+  let maxValue = 0;
+
+  if (acre > 0) {
+    maxUnit = 'একর';
+    maxValue = acre;
+  } else if (bigha > 0) {
+    maxUnit = 'বিঘা';
+    maxValue = bigha;
+  } else if (katha > 0) {
+    maxUnit = 'কাঠা';
+    maxValue = katha;
+  } else {
+    maxUnit = 'শতক';
+    maxValue = Number(shotok.toFixed(2));
+  }
+
+  return {
+    acre,
+    bigha,
+    katha,
+    shotok: Number(shotok.toFixed(2)),
+    maxUnit,
+    maxValue
+  };
+}
+
+
+
+
+
 }

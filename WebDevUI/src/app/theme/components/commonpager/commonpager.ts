@@ -47,6 +47,7 @@ export class CommonPager implements OnInit {
     @Input() strId3: string = '';
     @Input() strId4: string = '';
     @Input() strId5: string = '';
+    @Input() strId6: string = '';
     @Input() isTrue: boolean = false;
     @Input() sDate: any = null;
     @Input() eDate: any = null;
@@ -131,6 +132,7 @@ export class CommonPager implements OnInit {
     }
 
     getListByPage(pageIndex: number, isPaging: boolean, pageSize) {
+        debugger
         this.settings.loadingSpinnerOnAction = true;
         //var pageSizes=pageSize=='All'? -1:pageSize
         this.pageSize = parseInt(pageSize);
@@ -145,6 +147,7 @@ export class CommonPager implements OnInit {
             , strId3: this.strId3
             , strId4: this.strId4
             , strId5: this.strId5
+            , strId6: this.strId6
             , isTrue: this.isTrue
             , sDate: this.sDate
             , eDate: this.eDate
@@ -179,9 +182,11 @@ export class CommonPager implements OnInit {
 
                     if (this.res.resdata[this.responseTag] !== '' && this.res.resdata[this.responseTag] !== null) {
                         this.itemListByPage = JSON.parse(this.res.resdata[this.responseTag]);
+                         console.log("list detals",this.itemListByPage)
                     }
 
                     var totalRecords = this.itemListByPage.length > 0 ? this.itemListByPage[0].recordsTotal : 0;
+                   
 
                     this.inListPaging(this.itemListByPage, isPaging, pageIndex, totalRecords);
 

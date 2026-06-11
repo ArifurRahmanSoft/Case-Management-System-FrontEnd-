@@ -3539,3 +3539,134 @@
   color: #1b6844; /* A slightly different green or any color you like */
   transform: scale(1.05); /* Slight zoom effect */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TEST
+
+/* --- Desktop Styles (Default) --- */
+.header-btn-group {
+    gap: 8px;
+}
+
+.action-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Mobile Styles (Screens smaller than 768px) --- */
+@media screen and (max-width: 767px) {
+    
+    /* Hide the standard table header */
+    .responsive-table-container thead {
+        display: none;
+    }
+
+   .input{
+  width: 95%;
+}
+.textArea{
+  width: 95%;
+}
+.largeDevice{
+  display: none;
+}
+
+.searchDropdown{
+  margin-left: 5%;
+}
+
+    /* Make each table row look like an individual card */
+    .responsive-table-container tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #ccc !important;
+        padding: 10px;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Make cells stack vertically */
+    .responsive-table-container td {
+        display: block;
+        width: 100% !important;
+        border: none !important;
+        padding: 8px 0 !important;
+        text-align: left !important;
+    }
+
+    /* Style for the Label (Placed ABOVE the input) */
+    .responsive-table-container td::before {
+        content: attr(data-label);
+        //display: block; /* Forces label to its own line */
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    /* Adjust Action/Option cell for mobile */
+    .action-cell {
+        border-top: 1px solid #eee !important;
+        margin-top: 10px;
+        padding-top: 15px !important;
+    }
+
+    .action-wrapper {
+        justify-content: flex-start;
+    }
+
+    /* Header buttons adjustment */
+    .header-btn-group {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: flex-start;
+    }
+}
+
+
+@media screen and (min-width: 768px) {
+.input{
+  width: 90%;
+}
+.textArea{
+  width: 95%;
+}
+.mobile-only-btn{
+  display: none;
+}
+.smallDevice{
+  display: none;
+}
+}
+
+
+
+
+
+
+
+
+
+

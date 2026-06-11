@@ -63,6 +63,19 @@
   text-align: center;
 }
 
+
+.card-full {
+  grid-column: span 3;
+}
+
+.card-double {
+  grid-column: span 2;
+}
+
+.card-single {
+  grid-column: span 1;
+}
+
 .card-title {
   font-size: 16px;
   font-weight: 600;
@@ -111,3 +124,151 @@
     grid-column: span 1;
   }
 }
+
+////Start 
+/// 
+
+// .toggle-btn {
+//   cursor: pointer;
+//   font-weight: bold;
+//   margin-right: 8px;
+// }
+
+// .district-row {
+//   background: #dbeafe;
+//   font-weight: 700;
+//   font-size: 15px;
+// }
+
+// .thana-row {
+//   background: #dcfce7;
+//   font-weight: 600;
+// }
+
+// .mouza-row {
+//   background: #fef9c3;
+// }
+
+// .table td,
+// .table th {
+//   vertical-align: middle;
+// }
+
+
+
+/* ===== CARD STYLE ===== */
+.land-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+/* Header */
+.land-header {
+  background: linear-gradient(90deg, #4e73df, #224abe);
+  color: #fff;
+  padding: 12px 15px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== SCROLL AREA ===== */
+.land-table-wrapper {
+  max-height: 310px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Sticky header */
+.land-table thead th {
+  position: sticky;
+  top: 0;
+  background: #eef2ff;
+  z-index: 10;
+  border: 1px solid #ddd;
+}
+
+/* ===== ROW STYLES ===== */
+.district-row {
+  background: #dbeafe;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.thana-row {
+  background: #dcfce7;
+  font-weight: 600;
+}
+
+.mouza-row {
+  background: #fef9c3;
+}
+
+/* Table base */
+.table td,
+.table th {
+  vertical-align: middle;
+  border: 1px solid #eee;
+}
+
+/* ===== HIERARCHY INDENT ===== */
+.level-0 {
+  padding-left: 2px;
+  float: left;
+
+}
+
+.level-1 {
+  padding-left: 30px;
+}
+
+.level-2 {
+  padding-left: 60px;
+}
+
+/* ===== TOGGLE BUTTON ===== */
+.toggle-btn {
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 6px;
+  display: inline-block;
+  width: 18px;
+  //text-align: center;
+}
+
+/* Optional hover effect */
+.table tbody tr:hover {
+  background-color: #eaf1ff !important;
+  transition: 0.2s;
+}
+
+
+
+
+.tooltip-cell {
+  position: relative;
+}
+
+
+.custom-tooltip {
+  position: absolute;
+  top: -35px;
+  left: -120px;
+
+  background: #ffffff;
+  color: #333;
+
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+
+

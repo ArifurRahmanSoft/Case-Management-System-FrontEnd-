@@ -371,10 +371,14 @@
                                         <th
                                             style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
                                             মোট বকেয়া বছর</th>
-                                        <th
+                                        <th hidden
                                             style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
                                             সর্বশেষ পরিশোধিত <br>
                                             বাংলা সন</th>
+
+                                              <th
+                                            style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                           ইংরেজি অর্থ বছর</th>
                                         <th
                                             style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
                                             সর্বশেষ দাখিলা</th>
@@ -409,9 +413,15 @@
                                         <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
                                             {{item.totalDueYear}}
                                         </td>
-                                        <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+
+                                        <td hidden class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
                                             {{item.lastKhajnaYear}}
                                         </td>
+
+                                          <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            {{getFinancialYear(item.lastPayDate)}}
+                                        </td>
+                                        
                                         <td class="pl-2 pr-1 pt-1 pb-1"
                                             style="text-align: center; text-decoration: underline; color: blue; cursor: pointer;"
                                             (click)="_conversion.viewDocument(item.docVpath)">

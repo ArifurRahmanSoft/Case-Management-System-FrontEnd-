@@ -33,7 +33,7 @@ export class KhajnaEntryComponent implements OnInit {
     private userID = sessionStorage.getItem("userID");
     public loggedInfo = JSON.parse(sessionStorage.loggedUser);
     public cmnEntity: any = {};
-    public resmessage: string='';
+    public resmessage: string = '';
     public IsShow: boolean = true;
     public res: any;
     public pageSize: number = 15;
@@ -133,6 +133,7 @@ export class KhajnaEntryComponent implements OnInit {
     public muteKhajnaList: any = [];
     public _listByPageUrl: string = 'khajna/getbypage';
     getListByPage(pageSize) {
+        debugger
         setTimeout(() => {
             this._pg.getListByPage(1, true, pageSize);
         }, 0);
@@ -144,6 +145,22 @@ export class KhajnaEntryComponent implements OnInit {
         this.searchVal = this._pgTop.searchVal;
         this.getListByPage(pageSize);
     }
+
+
+    getFinancialYear(dateStr: string): string {
+        debugger
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        if (month >= 7) {
+            return `${year}-${year + 1}`;
+        } else {
+            return `${year - 1}-${year}`;
+        }
+    }
+
+
 
     public _saveUrl: string = 'khajna/saveupdateform';
     onSubmit() {

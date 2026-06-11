@@ -43,6 +43,8 @@ export class CaseManagementComponent implements OnInit {
     @ViewChild('mouzaState', { static: false }) _mouzaState: ElementRef;
     @ViewChild(ReportViewer) _rptViewer: ReportViewer;
     private userID = sessionStorage.getItem("userID");
+    public roleId = sessionStorage.getItem("roleId");
+    public isAdvocate: boolean = false;
     public loggedInfo = JSON.parse(sessionStorage.loggedUser);
     public cmnEntity: any = {};
     public resmessage: string;
@@ -57,6 +59,13 @@ export class CaseManagementComponent implements OnInit {
     public dagCs: string = '';
     public isReportShowOnSubmit: boolean = false;
     public today: string = '';
+
+    public district: string = '';
+    public thana: string = '';
+    public mouza: string = '';
+    public court: string = '';
+    public caseCstatus: string = '';
+    public casePriority: string = ''
 
 
 
@@ -111,6 +120,7 @@ export class CaseManagementComponent implements OnInit {
         this.getAllDistricts();
         this.getUploadType();
         this.getInitThanaAndRegOfficeById('1');
+        this.getUserRole();
         $('#deedName').focus();
     }
 
@@ -122,6 +132,22 @@ export class CaseManagementComponent implements OnInit {
     cmnbtnAction(evmodel) {
         debugger;
         this[evmodel.func](evmodel);
+    }
+
+
+    getUserRole() {
+        const loggedUserStr = sessionStorage.getItem('loggedUser');
+
+
+        if (loggedUserStr) {
+            const loggedUser = JSON.parse(loggedUserStr);
+            const roleId = loggedUser.roleId;
+            if (roleId == 9) {
+                this.isAdvocate = true;
+            } else {
+                this.isAdvocate = false;
+            }
+        }
     }
 
     createForm() {
@@ -270,16 +296,22 @@ export class CaseManagementComponent implements OnInit {
 
     getAllDeedByParam(event: any) {
         debugger
-        this.caseForm.controls.mouzaId.setValue(event);
+        this.onMouzaSelectionChange(event)//for mouza id
+        // this.caseForm.controls.mouzaId.setValue(event);
         this.getAllDeedById();
+
     }
 
     public DeedList: any = [];
     public _getDeedUrl: string = 'case/getdeedbyid';
     getAllDeedById() {
+        debugger
         this.landDeedIds = '';
+        this.DeedList = ''
         debugger
         var list: Array<{ id, text }> = [{ id: '', text: "অনুগ্রহ করে নির্বাচন করুন" }];
+        //let list: { id: string, text: string }[] = [];
+
         var param = {
             strId: this.caseForm.controls.districtId.value, strId2: this.caseForm.controls.thanaId.value,
             strId3: this.caseForm.controls.mouzaId.value, strId4: this.dagValue, strId5: this.selectDagName
@@ -291,12 +323,21 @@ export class CaseManagementComponent implements OnInit {
                 if (this.res.resdata.deedList != '') {
                     let parsed = JSON.parse(this.res.resdata.deedList);
                     let deedArray = JSON.parse(parsed[0].JSON_DOC);
-                    var itemList = deedArray;
-                    itemList.forEach(item => {
-                        list.push({ id: item.deedId.toString(), text: item.deedNoDate })
-                    })
-                    this.DeedList = list;
-                    console.log("this deed list is ", this.DeedList)
+                    // if (deedArray != null) {
+                    //     var itemList = deedArray;
+                    //     itemList.forEach(item => {
+                    //         list.push({ id: item.deedId.toString(), text: item.deedNoDate })
+                    //     })
+                    //     this.DeedList = list;
+                    //     console.log("this deed list is ", this.DeedList)
+                    // }
+                    if (deedArray && deedArray.length) {
+                        // ONLY add actual deed data, no placeholder
+                        this.DeedList = deedArray.map(item => ({
+                            id: item.deedId.toString(),
+                            text: item.deedNoDate
+                        }));
+                    }
 
                 }
 
@@ -335,6 +376,32 @@ export class CaseManagementComponent implements OnInit {
         this.caseForm.controls.deedIds.setValue(idList.join(','));
         this.caseForm.controls.deedNos.setValue(textList.join(','));
     }
+
+
+    mouzaIdLst: any;
+    onMouzaSelectionChange(event: any) {
+        debugger
+        this.caseForm.controls.mouzaId.setValue(null);
+        if (!this.mouzaIdLst) { return }
+
+        let selectedIds = event;
+        if (!Array.isArray(selectedIds)) {
+            selectedIds = [selectedIds];
+        }
+        let idList: string[] = [];
+        let textList: string[] = [];
+        selectedIds.forEach(id => {
+            let found = this.mouzasList.find(x => x.id == id);
+            if (found) {
+                idList.push(found.id);
+
+            }
+        });
+        this.caseForm.controls.mouzaId.setValue(idList.join(','));
+        console.log(" this.caseForm.controls.mouzaId----", this.caseForm.controls.mouzaId)
+
+    }
+
 
 
 
@@ -483,39 +550,67 @@ export class CaseManagementComponent implements OnInit {
         }
     }
 
-
     public selectDagName: any
     onSurveyChange(event: any) {
         debugger
         this.selectDagName = event.target.value;
-        //add for edit
         if (this.selectDagName == 1) {
-            this.dagValue = this.getFormData.dagCS;
+            this.dagValue = this.caseForm.controls.dagCS.value;
             this.getAllDeedById();
         }
         if (this.selectDagName == 2) {
-            this.dagValue = this.getFormData.dagSA;
+            this.dagValue = this.caseForm.controls.dagSA.value;
             this.getAllDeedById();
         }
         if (this.selectDagName == 3) {
-            this.dagValue = this.getFormData.dagDR;
+            this.dagValue = this.caseForm.controls.dagDR.value;
             this.getAllDeedById();
         }
         if (this.selectDagName == 4) {
-            this.dagValue = this.getFormData.dagRS;
+            this.dagValue = this.caseForm.controls.dagRS.value;
             this.getAllDeedById();
         }
         if (this.selectDagName == 5) {
-            this.dagValue = this.getFormData.dagBS;
+            this.dagValue = this.caseForm.controls.dagBS.value;
             this.getAllDeedById();
         }
-        //end edit
+
         this.caseForm.get('selectedSurvey')?.setValue(this.selectDagName);
         if (this.selectDagName == this.dagName) {
             this.getAllDeedById();
         }
-
     }
+
+    // public selectDagName: any
+    // onSurveyChange(event: any) {
+    //     debugger
+    //     this.selectDagName = event.target.value;
+    //     if (this.selectDagName == 1) {
+    //         this.dagValue = this.getFormData.dagCS;
+    //         this.getAllDeedById();
+    //     }
+    //     if (this.selectDagName == 2) {
+    //         this.dagValue = this.getFormData.dagSA;
+    //         this.getAllDeedById();
+    //     }
+    //     if (this.selectDagName == 3) {
+    //         this.dagValue = this.getFormData.dagDR;
+    //         this.getAllDeedById();
+    //     }
+    //     if (this.selectDagName == 4) {
+    //         this.dagValue = this.getFormData.dagRS;
+    //         this.getAllDeedById();
+    //     }
+    //     if (this.selectDagName == 5) {
+    //         this.dagValue = this.getFormData.dagBS;
+    //         this.getAllDeedById();
+    //     }
+
+    //     this.caseForm.get('selectedSurvey')?.setValue(this.selectDagName);
+    //     if (this.selectDagName == this.dagName) {
+    //         this.getAllDeedById();
+    //     }
+    // }
 
     public dagName: any;
     public dagValue: any;
@@ -749,7 +844,7 @@ export class CaseManagementComponent implements OnInit {
 
 
     @ViewChild('modalCort') modalCort: TemplateRef<any>;
-        openAddCort(): void {
+    openAddCort(): void {
         debugger
         const _config = new MatDialogConfig();
         _config.restoreFocus = false;
@@ -798,7 +893,7 @@ export class CaseManagementComponent implements OnInit {
 
 
 
-    
+
     public caseCort: string = '';
     public _saveCortUrl: string = 'dropdown/saveupdatecasecourt';
     onSubmitAddCort() {
@@ -901,19 +996,32 @@ export class CaseManagementComponent implements OnInit {
 
 
 
+    getbyAdvocate(func: string, model: any) {
+        const modelEvnt = {
+            func: func,
+            model: model
+        };
+        console.log("modelEvnt1----------", modelEvnt)
+        this.cmnEntity.isShow = true
+        this.cmnbtnAction(modelEvnt)
+    }
+
 
     public docList: any;
     public _getbyIdUrl: string = 'case/getbyid';
     public getFormData: any;
     edit(modelEvnt) {
         debugger;
+
         this.reset();
         //modelEvnt.event.preventDefault();
         var param = { strId: modelEvnt.model.caseOid };
+        console.log("modelEvnt----------", param)
         var apiUrl = this._getbyIdUrl
         this._dataservice.getWithMultipleModel(apiUrl, param)
             .subscribe(response => {
                 this.res = response;
+                console.log("modelEvnt----------this.res", this.res)
                 this.docListCase = [];
                 if (this.res.resdata.caseMaster != '') {
                     var cases = JSON.parse(this.res.resdata.caseMaster)[0];
@@ -923,7 +1031,7 @@ export class CaseManagementComponent implements OnInit {
                         caseNo: cases.caseNo,
                         refCaseNo: cases.refCaseNo,
                         caseType: cases.caseTypeId,
-                        casePriorityId: cases.caseTypeId,
+                        casePriorityId: cases.casePriorityId,
                         courtId: cases.CourtId,
                         caseDate: this._conversion.DateConvert(cases.caseDate),
                         districtId: cases.districtId,
@@ -984,6 +1092,10 @@ export class CaseManagementComponent implements OnInit {
                             console.log("final deed id is", this.landDeedIds)
                             this.getAllDeed();
                         }
+                        //for mouza
+                        this.mouzaIdLst = [];
+                        let mouzaId = cases.mouzaId
+                        this.mouzaIdLst = mouzaId.split(",")
                     });
 
 
@@ -1077,6 +1189,7 @@ export class CaseManagementComponent implements OnInit {
 
 
     reset() {
+        debugger
         this.caseForm = this.formBuilder.group({
             caseOid: new FormControl(null),
             caseNo: new FormControl(null),
@@ -1112,12 +1225,18 @@ export class CaseManagementComponent implements OnInit {
         })
         this.hearingList = [];
         this.advHearingList = [];
-        this.landDeedIds = [];
+        //this.landDeedIds = [];
         this.docListCase = [];
+        this.mouzaIdLst = [];
+        this.mouzasList = []
+        this.thanasList = [];
+        this.landDeedIds = '';
+
 
 
         this.dagValue = null;
         this.selectDagName = null;
+
 
     }
 
@@ -1450,6 +1569,30 @@ export class CaseManagementComponent implements OnInit {
         });
 
 
+    }
+
+
+
+
+
+
+    public allPazesize = 10000
+    getCaseSearchByParam(district: any, thana: any, mouza: any, court: any) {
+        debugger
+        this.district = district;
+        this.thana = thana
+        this.mouza = mouza
+        this.court = court
+        this.getListByPage(this.allPazesize);
+    }
+    getByPagesClear() {
+        this.district = '';
+        this.thana = '';
+        this.mouza = '';
+        this.court = '';
+        this.caseCstatus = '';
+        this.casePriority = '';
+        this.getListByPage(this.pageSize);
     }
 
 

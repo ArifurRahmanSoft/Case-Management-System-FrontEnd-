@@ -12,7 +12,7 @@
 
                 <div class="col-md-12 card-header"
                     style="border: 1px solid #ccc; background-color: #3B82F6; text-align: center; color: #fff;">
-                    <h5><mat-icon>dashboard</mat-icon>কেস ম্যানেজমেন্ট ড্যাশবোর্ড </h5>
+                    <h5><mat-icon class="mr-1">gavel </mat-icon>কেস ম্যানেজমেন্ট সিস্টেম ড্যাশবোর্ড </h5>
                 </div>
                 <br>
 
@@ -56,11 +56,12 @@
 
                 </div> -->
 
- <div class="row g-3 ml-2 ">
+                <div class="row g-3 ml-2 ">
 
 
-    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4  headerDashboardColor ">
-        <div  style="
+                    <div (click)="getCaseListByParam(caseStatus[0]?.caseStatusOid,''); openModalEntryDialog('caseModal')"
+                        class="col-lg-2  col-md-6 col-6 p-2 mr-4  headerDashboardColor ">
+                        <div style="
           
             text-align:center;
             background: linear-gradient(135deg, #4e73df, #224abe);
@@ -69,15 +70,15 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding-top:10px;
-        "  >
-            <h3 style="margin:0;">{{ totalActiveCase }}</h3>
-            <p style="margin:0; font-size:14px;">চলমান মামলা</p>
-        </div>
-    </div>
+        ">
+                            <h3 style="margin:0;">{{ totalActiveCase }}</h3>
+                            <span style="margin:0; font-size:14px;">চলমান মামলা</span>
+                        </div>
+                    </div>
 
-   
-    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
-        <div  style="
+
+                    <div (click)="getCaseListByParam('',casePriorty[1]?.priorityOid)" (click)="openModalEntryDialog('caseModal');" class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+                        <div style="
             text-align:center;
             background: linear-gradient(135deg, #e74a3b, #c0392b);
             color: white;
@@ -86,14 +87,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding-top:10px;
         ">
-            <h3 style="margin:0;">{{ caseurgentPriorty }}</h3>
-            <p style="margin:0; font-size:14px;">উচ্চ ঝুঁকির মামলা</p>
-        </div>
-    </div>
+                            <h3 style="margin:0;">{{ caseurgentPriorty }}</h3>
+                            <p style="margin:0; font-size:14px;">উচ্চ ঝুঁকির মামলা</p>
+                        </div>
+                    </div>
 
 
-    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
-        <div  style="
+                    <div class="col-lg-2  col-md-6 col-6 p-2 mr-4 headerDashboardColor">
+                        <div style="
             text-align:center;
             background: linear-gradient(135deg, #1cc88a, #13855c);
             color: white;
@@ -102,14 +103,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding-top:10px;
         ">
-            <h3 style="margin:0;">{{ totalCompany }}</h3>
-            <p style="margin:0; font-size:14px;">মামলাযুক্ত কোম্পানির সংখ্যা</p>
-        </div>
-    </div>
+                            <h3 style="margin:0;">{{ totalCompany }}</h3>
+                            <p style="margin:0; font-size:14px;">মামলাযুক্ত কোম্পানির সংখ্যা</p>
+                        </div>
+                    </div>
 
 
-    <div class="col-lg-2  col-md-6 col-6 p-2 headerDashboardColor">
-        <div style="
+                    <div  (click)="getCaseListByParam(caseStatus[1]?.caseStatusOid,'')" (click)="openModalEntryDialog('caseModal');" class="col-lg-2  col-md-6 col-6 p-2 headerDashboardColor">
+                        <div style="
             text-align:center;
             background: linear-gradient(135deg, #f6c23e, #dda20a);
             color: white;
@@ -118,12 +119,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding-top:10px;
         ">
-            <h3 style="margin:0;">{{ totalResolvedCase }}</h3>
-            <p style="margin:0; font-size:14px;">স্থগিত মামলা</p>
-        </div>
-    </div>
+                            <h3 style="margin:0;">{{ totalResolvedCase }}</h3>
+                            <p style="margin:0; font-size:14px;">স্থগিত মামলা</p>
+                        </div>
+                    </div>
 
-</div> 
+                </div>
 
 
 
@@ -137,11 +138,8 @@
                         style="border:none; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow-x:auto; max-height:310px; overflow-y:auto;">
 
                         <!-- 🔹 Header -->
-                        <div style="background:linear-gradient(90deg,#4e73df,#224abe);
-              color:#fff;
-              padding:12px 15px;
-              font-size:16px;
-              font-weight:600;">
+                        <div
+                            style="background:linear-gradient(90deg,#4e73df,#224abe); color:#fff; padding:12px 15px;font-size:16px;font-weight:600;">
                             📋 পরবর্তী শুনানির লিস্ট
                         </div>
 
@@ -153,12 +151,22 @@
                                 <!-- Header -->
                                 <thead>
                                     <tr style="border: 1px solid blueviolet; background-color:#eef2ff;">
-                                        <th style="padding:10px; border:1px solid #ddd; text-align:left;">মামলা নং</th>
-                                        <th style="padding:10px; border:1px solid #ddd; text-align:left;">সুনানির তারিখ
+                                        <th
+                                            style="padding:10px; border:1px solid #ddd; text-align:left;top: 0;background:#eef2ff;  position: sticky">
+                                            মামলা নং</th>
+                                        <th
+                                            style="padding:10px; border:1px solid #ddd; text-align:left;top: 0;background:#eef2ff; position: sticky">
+                                            শুনানির তারিখ
                                         </th>
-                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">কোর্ট</th>
-                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">থানা</th>
-                                        <th style="padding:10px; border:1px solid #ddd; text-align:center;">মৌজা</th>
+                                        <th
+                                            style="padding:10px; border:1px solid #ddd; text-align:center;top: 0;background:#eef2ff; position: sticky">
+                                            কোর্ট</th>
+                                        <th
+                                            style="padding:10px; border:1px solid #ddd; text-align:center;top: 0;background:#eef2ff; position: sticky">
+                                            থানা</th>
+                                        <th
+                                            style="padding:10px; border:1px solid #ddd; text-align:center;top: 0;background:#eef2ff; position: sticky">
+                                            মৌজা</th>
 
                                     </tr>
                                 </thead>
@@ -180,7 +188,8 @@
                                             {{ hr.hearing_date | date:'dd-MMM-yy' }}
                                         </td> -->
 
-                                        <td [ngStyle]="{ 'padding': '10px','border': '1px solid #eee', 'font-weight': '500', 'color': getHearingColor(hr.hearing_date) }">
+                                        <td
+                                            [ngStyle]="{ 'padding': '10px','border': '1px solid #eee', 'font-weight': '500', 'color': getHearingColor(hr.hearing_date) }">
                                             {{ hr.hearing_date | date:'dd-MMM-yy' }}
                                         </td>
 
@@ -225,12 +234,12 @@
                     </div>
 
                     <!-- GRAPH 3: DOCUMENT PROGRESS -->
-                      <div class="card">
+                    <div class="card">
                         <div class="card-title" style="background:linear-gradient(90deg,#4e73df,#224abe); color:#fff;
                      padding:12px 15px; font-size:16px; font-weight:600;"> 🚨 মামলার প্রায়োরিটি
                         </div>
                         <canvas id="documentChart"></canvas>
-                    </div>  
+                    </div>
 
 
 
@@ -249,7 +258,274 @@
 
                 </div>
 
+
+
+
+
+
+
+
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<ng-template #modalEntry style="overflow: hidden; margin-top: -20%;">
+    <div class="mat-dialog-header border-bottom">
+        <ng-container *ngIf="modalLabelName !== 'Quotation'; else searchTemplate">
+            <h2 class="pull-left" mat-dialog-title class="mb-0">{{modalLabelName}}Case List </h2>
+        </ng-container>
+        <ng-template #searchTemplate>
+            <!-- <h2 class="pull-left" mat-dialog-title class="mb-0">{{modalLabelName}} Search</h2> -->
+            <h2 class="pull-left" mat-dialog-title class="mb-0">Estimate Search</h2>
+
+        </ng-template>
+
+        <div class="pull-right" style="margin-top: -7%;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <button class="pull-right" mat-icon-button matDialogClose tabindex="-1">
+                <mat-icon aria-label="Close dialog">close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <form #modalForms="ngForm" [formGroup]="modalForm" role="form" novalidate name="modalForm"
+        (ngSubmit)="modalSubmit(modalForm)">
+        <mat-dialog-content >
+            <fieldset class="mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+
+                      
+                       <div  class="card-body pl-0 pr-4 pt-2"
+                    style="min-height: 360px; margin-bottom: -20px;">
+
+                    <!-- <div class="row p-0 mt-3 shadow-lg p-3 mr-5 mb-0 bg-body-tertiary rounded">
+                        <div class="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                            <div class="form-group clearfix">
+                                <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="deedNo"
+                                    style="float: left;">জেলাঃ </label>
+                                <div class=" col-sm-7 p-0 m-0 ml-0" style="float: left;">
+                                    <div class="searchDropdown" style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                        <ng-select2 [(ngModel)]="district" [options]="options" [allowClear]="true"
+                                            id="district" name="district" (valueChanged)="getThanasById($event)"
+                                            [data]="districtsList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                         
+
+
+                        </div>
+
+
+
+
+
+                        <div class="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                            <div class="form-group clearfix">
+                                <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="caseDate"
+                                    style="float: left;">থানাঃ </label>
+                                <div class=" col-sm-7 p-0 m-0" style="float: left;">
+                                    <div class="searchDropdown" style="padding: 0px; width: 96.5%; font-size: 13px; float: left;">
+                                        <ng-select2 [(ngModel)]="thana" [options]="options" [allowClear]="true"
+                                            id="thanaId" (valueChanged)="getMouzasById($event)" name="thanaId"
+                                            [data]="thanasList" [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                            <div class="form-group clearfix">
+                                <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="caseDate"
+                                    style="float: left;">মৌজাঃ </label>
+                                <div class=" col-sm-7 p-0 m-0" style="float: left;">
+                                    <div class="searchDropdown" style="padding: 0px; width: 95.5%; font-size: 13px; float: left;">
+                                        <ng-select2 [(ngModel)]="mouza" [options]="options" [allowClear]="true"
+                                            id="mouzaId" name="mouzaId" [data]="mouzasList"
+                                            (valueChanged)="getAlldeedById($event)"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-xs-12 m-0 p-0" style="float: left;">
+                            <div class="form-group clearfix">
+                                <label class="control-label col-sm-3 ml-4 p-0 m-0 pt-1" for="caseDate"
+                                    style="float: left;">কোর্ট </label>
+                                <div class=" col-sm-7 p-0 m-0" style="float: left;">
+                                    <div class="searchDropdown"  style="padding: 0px; width: 95.5%; font-size: 13px; float: left;">
+                                        <ng-select2 [(ngModel)]="court" [options]="options" [allowClear]="true"
+                                            id="court" name="court" [data]="courtList"
+                                            (valueChanged)="getAlldeedById($event)"
+                                            [placeholder]="'অনুগ্রহ করে নির্বাচন করুন'">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 col-xs-12 ml-2 pt-0" style="float: left;">
+
+                            <div class="form-group clearfix">
+                                <span id="btnSearch" style="height: 19px;" class="btn btn-primary btn-sm "
+                                    (click)="getCaseSearchByParam(district,thana,mouza,court)"><i style="height: 26px;"
+                                        class="fa fa-search"></i> Search</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 col-xs-12 ml-2 pt-0" style="float: left;">
+
+                            <div class="form-group clearfix">
+                                <span id="btnSearch" style="height: 19px;" class="btn btn-danger btn-sm "
+                                    (click)="getByPagesClear()"><i style="height: 26px;" class="fa fa-refresh"></i>
+                                    refresh</span>
+                            </div>
+                        </div>
+
+                    </div> -->
+
+
+                 
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <pager-top #cmnpagerTop (setPage)="getListByPage($event)" (sendList)="sendToList($event)"
+                                [pageSize]="pageSize" [searchVal]="searchVal" [IsSearchOnServer]="true"
+                                [strId]="district" [strId2]="thana" [strId3]="mouza" [strId4]="court"
+                                [strId5]="caseCstatus" [strId6]="casePriority" [responseTag]="responseTag"
+                                [apiUrl]="_listByPageUrl">
+                            </pager-top>
+                        </div>
+
+                    </div>
+
+                    <div class="row pr-2">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:653px; overflow:auto;">
+                                <table id="table" class="table table-striped table-sm table-bordered p-0"
+                                    *ngIf="this.isLoaded">
+                                    <thead class="table-dark"
+                                        style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: left;">
+                                        <tr class="myCustomTableHeaderText">
+                                      
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                মামলা নং</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                রেফারেন্স মামলা নং</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                মামলার তারিখ</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                মামলার ধরন</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                প্রায়োরিটি</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                কোর্ট</th>
+                                            <th
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center;">
+                                                বর্তমান অবস্থা</th>
+
+                                            <!-- <th class="largeDevice"
+                                                style="position:sticky; top:-1.5px; z-index:1; cursor: pointer; text-align: center; width: 10%;">
+                                                এ্যাকশন</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="p-0" style="padding-bottom: 0px; margin-bottom: 0px;">
+                                        <tr *ngFor="let item of this.caseList;let sl = index">
+                                            
+                                            <td 
+                                         
+                                            (click)="getbyAdvocate('edit',item)" class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                            <a href="javascript:void(0);"> {{item.caseNo}}</a>
+                                               
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.refCaseNo}}
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.caseDate | date:'dd-MMM-yy'}}
+                                            </td>
+
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.caseTypeBnName}}
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.casePriorityBnName}}
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.courtBnName}}
+                                            </td>
+                                            <td class="pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+                                                {{item.currentStatusBnName}}
+                                            </td>
+
+                                            <!-- <td class="largeDevice pl-2 pr-1 pt-1 pb-1" style="text-align: center;">
+
+                                            
+
+                                                <span type="button" *ngIf="false" class="btn btn-sm"
+                                                    (click)="loadReportOut(item.deedId);"
+                                                    style="padding-bottom: 3px; margin-right: 2px; float: left;"><i
+                                                        class="text-danger fa fa-file-pdf-o"></i></span>
+                                                <common-button-option #cmnbuttonoption style="float: left;"
+                                                    (executeSubmit)="cmnbtnAction($event)" [cmnEntity]="cmnEntity"
+                                                    [model]="item" [itemName]="item.deedNo"></common-button-option>
+
+
+
+                                            </td> -->
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pr-2">
+                        <div class="col-md-12">
+                            <pager-bottom #cmnpager (setPage)="getListByPage($event)" (sendList)="sendToList($event)"
+                                [searchVal]="searchVal" [cmnEntity]="cmnEntity" [pageSize]="pageSize" [strId]="district"
+                                [strId2]="thana" [strId3]="mouza" [strId4]="court" [strId5]="caseCstatus"
+                                [strId6]="casePriority" [responseTag]="responseTag"
+                                [apiUrl]="_listByPageUrl"></pager-bottom>
+                        </div>
+                    </div>
+                </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </mat-dialog-content>
+        <mat-dialog-actions class="border-top" style="overflow:hidden;" align="end">
+            <button type="button" mat-button matDialogClose>Close</button>
+           
+        </mat-dialog-actions>
+    </form>
+</ng-template>

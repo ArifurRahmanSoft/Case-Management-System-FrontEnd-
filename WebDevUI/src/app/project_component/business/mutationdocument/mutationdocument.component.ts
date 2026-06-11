@@ -381,9 +381,11 @@ export class MutationDocumentComponent implements OnInit {
                         this.fileSrcName = this.mutationDocForm.controls.khatianNo.value + '_' + this.mutationDocForm.controls.jotNo.value + '_' + this.mutationDocForm.controls.mutationDate.value //file.name;
                     }
 
-                    if (mutation.deedIds != null && mutation.deedIds.length > 0) {
-                        this.landDeedIds = mutation.deedIds.split(',');
-                    }
+                    
+
+                    // if (mutation.deedIds != null && mutation.deedIds.length > 0) {
+                    //     this.landDeedIds = mutation.deedIds.split(',');
+                    // }
 
                     if (mutation.classIds != null && mutation.classIds.length > 0) {
                         this.landClassIds = mutation.classIds.split(',');
@@ -392,6 +394,13 @@ export class MutationDocumentComponent implements OnInit {
                     this.getThanaById(mutation.districtId);
                     this.getMouzaId(mutation.thanaId);
                     this.getAllLandDeed(mutation.mouzaId);
+                    
+                    setTimeout(()=>{
+                        this.landDeedIds=[]
+                         if (mutation.deedIds != null && mutation.deedIds.length > 0) {
+                        this.landDeedIds = mutation.deedIds.split(',');
+                    }
+                    })
                 }
             }, error => {
                 console.log(error);

@@ -167,7 +167,9 @@ export class DeedDocumentComponent implements OnInit {
 
             basePath: new FormControl(this.cmnEntity.menuPath),
             isActive: new FormControl(true),
-            isPosted: new FormControl(false)
+            isPosted: new FormControl(false),
+            isRegister: new FormControl(false),
+            isMortgage: new FormControl(false)
         });
     }
 
@@ -256,6 +258,7 @@ export class DeedDocumentComponent implements OnInit {
 
         var param = { loggedUserId: this.userID };
         var ModelsArray = [param, deedDocForms, this.docList, this.deedReceiverList, this.deedSenderList, this.bayaDeedList, this.deedServeyList];
+        console.log("modal array is",ModelsArray)
         //var ModelsArray = [param, this.deedDocForm.value, this.docList, this.deedReceiverList, this.deedSenderList, this.bayaDeedList, this.deedServeyList];
         var apiUrl = this._saveUrl;
         this._dataservice.postMultipleModelForm(apiUrl, ModelsArray, formData)
@@ -599,7 +602,10 @@ export class DeedDocumentComponent implements OnInit {
 
                         basePath: this.cmnEntity.menuPath,
                         isActive: deed.isActive == "1" ? true : false,
-                        isPosted: deed.isPosted == "1" ? true : false
+                        isPosted: deed.isPosted == "1" ? true : false,
+
+                        isMortgage: deed.isMortgage == "1" ? true : false,
+                        isRegister: deed.isRegister == "1" ? true : false
                     });
 
                     if (this.res.resdata.objViaDeed != '') {
@@ -660,7 +666,6 @@ export class DeedDocumentComponent implements OnInit {
 
                         this.docList = docLists;
                     }
-
                     if (this.res.resdata.objOwner != '') {
                         //this.strDeedReceiver = '';
                         this.deedDocForm.controls.deedReceiver.setValue('');
@@ -834,7 +839,9 @@ export class DeedDocumentComponent implements OnInit {
 
             basePath: new FormControl(this.cmnEntity.menuPath),
             isActive: new FormControl(true),
-            isPosted: new FormControl(false)
+            isPosted: new FormControl(false),
+            isRegister: new FormControl(false),
+            isMortgage: new FormControl(false)
         });
 
         // this.receiverList=[];
