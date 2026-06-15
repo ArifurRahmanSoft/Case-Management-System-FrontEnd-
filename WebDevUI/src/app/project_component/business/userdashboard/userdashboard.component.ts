@@ -22,7 +22,7 @@ export interface LandNode {
   expanded?: boolean;
   children?: LandNode[];
 }
-
+ 
 
 @Component({
   selector: 'app-userdashboard',
@@ -36,6 +36,10 @@ export class UserDashboardComponent implements OnInit {
   //npm install chart.js@2.9.4 ng2-charts@2.4.2 --save
   landData: LandNode[] = [];
   landDatas1: LandNode[] = [];
+  toolTotalLand = 1;
+toolMortgageLand = 2;
+toolUnRegisterLand = 3;
+hovered: number | null = null;
 
 
   public settings: Settings;
@@ -78,343 +82,16 @@ export class UserDashboardComponent implements OnInit {
     node.expanded = !node.expanded;
   }
   ngOnInit(): void {
-
-    this.loadCategoryChart();
-    this.loadDocumentProgressChart();
-    this.getAllLandCategory();
-    this.loadMutationChart();
-
     this.getareaWiseList()
     this.getDeedDashbord()
-
-
-
-
-    this.getEntryMenu();
-    this.getOperatorById(this.entryMenuId);
-    this.getAllUserActivity();
-
-    this.updateSubscription = interval(300000).subscribe((val) => {
-      this.getAllUserActivity()
-    });
   }
 
-  public listBgColor: any = ['indigo', 'green', 'amber', 'red'];
-
-  getEntryMenu() {
-    var list: Array<{ id, text }> = [{ id: null, text: "অনুগ্রহ করে নির্বাচন করুন" }];
-    list.push({ id: 'T_LAND_DEED', text: 'দলিল দস্তাবেজ' });
-    list.push({ id: 'T_SELLERS', text: 'দলিল দাতা' });
-    list.push({ id: 'T_LAND_MUTATION', text: 'নামজারি তথ্য' });
-    list.push({ id: 'T_KHAJNA_MUTATION_WISE', text: 'খাজনা প্রদা' });
-
-    this.entryMenuList = list;
-  }
-
-  public _getEntryOperatorUrl: string = 'userDashboard/getallentryuserbytable';
-  getOperatorById(tableid) {
-    debugger;
-    this.entryOperatorList = [];
-    this.entryOperatorId = '';
-    var list: Array<{ id, text }> = [{ id: '', text: "অনুগ্রহ করে নির্বাচন করুন" }];
-    var param = { strId: tableid };
-    var apiUrl = this._getEntryOperatorUrl;
-    this._dataservice.getWithMultipleModel(apiUrl, param)
-      .subscribe(response => {
-        debugger;
-        this.res = response;
-        if (this.res.resdata.listEntryUser != '') {
-          var itemList = JSON.parse(this.res.resdata.listEntryUser);
-          itemList.forEach(item => {
-            list.push({ id: item.entryUserId, text: item.entryBy });
-          });
-
-          this.entryOperatorList = list;
-        }
-      }, error => {
-        console.log(error);
-      });
-  }
-
-
-  public allEntryCount: number = 0;
-  public todaysEntryCount: number = 0;
-  public allDocUpCount: number = 0;
-  public todaysDocUpCount: number = 0;
-  public ttlBgColor: string = '';
-
-  public itTodayEntry: number = 0;
-  public itTotalEntry: number = 0;
-  public itTodayDocUp: number = 0;
-  public itTotalDocUp: number = 0;
-  public itBgColor: string = '';
-
-  public landTodayEntry: number = 0;
-  public landTotalEntry: number = 0;
-  public landTodayDocUp: number = 0;
-  public landTotalDocUp: number = 0;
-  public landBgColor: string = '';
-
-  public listUserActivity: any = [];
-  public _getActivityUrl: string = 'userDashboard/getallentryuseractivity';
-  getAllUserActivity() {
-    debugger;
-    this.listUserActivity = [];
-    this.allEntryCount = 0;
-    this.todaysEntryCount = 0;
-    this.allDocUpCount = 0;
-    this.todaysDocUpCount = 0;
-
-    this.itTodayEntry = 0;
-    this.itTotalEntry = 0;
-    this.itTodayDocUp = 0;
-    this.itTotalDocUp = 0;
-    this.itBgColor = '';
-
-    this.landTodayEntry = 0;
-    this.landTotalEntry = 0;
-    this.landTodayDocUp = 0;
-    this.landTotalDocUp = 0;
-    this.landBgColor = '';
-
-    var param = { strId: this.entryMenuId == undefined || this.entryMenuId == null ? 'T_LAND_DEED' : this.entryMenuId, strId2: this.entryOperatorId == undefined || this.entryOperatorId == '' ? null : this.entryOperatorId, strId3: this.today == '' ? null : this.today };
-    var apiUrl = this._getActivityUrl;
-    this._dataservice.getWithMultipleModel(apiUrl, param)
-      .subscribe(response => {
-        this.res = response;
-        var count = 0;
-
-        this.listUserActivity = [];
-        this.allEntryCount = 0;
-        this.todaysEntryCount = 0;
-        this.allDocUpCount = 0;
-        this.todaysDocUpCount = 0;
-
-        this.itTodayEntry = 0;
-        this.itTotalEntry = 0;
-        this.itTodayDocUp = 0;
-        this.itTotalDocUp = 0;
-        this.itBgColor = '';
-
-        this.landTodayEntry = 0;
-        this.landTotalEntry = 0;
-        this.landTodayDocUp = 0;
-        this.landTotalDocUp = 0;
-        this.landBgColor = '';
-
-        if (this.res.resdata.listUserActivity != '') {
-          var itemList = JSON.parse(this.res.resdata.listUserActivity);
-          var itemLists = itemList.filter(x => x.entryUserId != '08776' && x.entryUserId != '06182');
-
-          itemList.forEach(item => {
-            debugger;
-            if (item.isLand) {
-              this.landTodayEntry += item.todaysEntry;
-              this.landTotalEntry += item.totalEntry;
-
-              this.landTodayDocUp += item.todaysDocUp;
-              this.landTotalDocUp += item.totalDocUp;
-            } else {
-              this.itTodayEntry += item.todaysEntry;
-              this.itTotalEntry += item.totalEntry;
-
-              this.itTodayDocUp += item.todaysDocUp;
-              this.itTotalDocUp += item.totalDocUp;
-            }
-          });
-
-          itemLists.forEach(item => {
-            debugger;
-            if (count == 4) { count = 0 };
-            item.bgColor = this.listBgColor[count];
-            count++;
-          });
-
-          if (count == 4) { count = 0 };
-          this.itBgColor = this.listBgColor[count];
-          if (count == 4) { count = 0 };
-          count = count + 1;
-          if (count == 4) { count = 0 };
-          this.landBgColor = this.listBgColor[count];
-          if (count == 4) { count = 0 };
-          count = count + 1;
-          if (count == 4) { count = 0 };
-          this.ttlBgColor = this.listBgColor[count];
-
-          this.listUserActivity = itemLists;
-          this.allEntryCount = this.listUserActivity[0].allEntryCount;
-          this.todaysEntryCount = this.listUserActivity[0].todaysEntryCount;
-
-          this.allDocUpCount = this.listUserActivity[0].allDocUpCount;
-          this.todaysDocUpCount = this.listUserActivity[0].todaysDocUpCount;
-        }
-      }, error => {
-        console.log(error);
-      });
-  }
+  
 
 
 
-
-
-
-
-
-  public landCategoryId: string = '';
-  public landCategoryList: any = [];
-  public _getLandCategoryUrl: string = 'dropdown/getalllandcategories';
-  getAllLandCategory() {
-    debugger;
-    const quantityMaps: any = { '1': 200, '2': 500, '3': 300, '4': 400, '5': 100, '6': 800, '7': 20 };
-    var list: Array<{ id: string, text: string, quantity?: number }> = [{ id: '', text: "অনুগ্রহ করে নির্বাচন করুন" }];
-    var param = { strId: '' };
-    var apiUrl = this._getLandCategoryUrl;
-    this._dataservice.getWithMultipleModel(apiUrl, param)
-      .subscribe(response => {
-        this.res = response;
-
-        if (this.res.resdata.listLandCategories != '') {
-          var itemList = this.res.resdata.listLandCategories;
-          itemList.forEach(item => {
-            list.push({ id: item.categoryId.toString(), text: item.categoryName, quantity: quantityMaps[item.categoryId] });
-          });
-
-          this.landCategoryList = list;
-          console.log(" this.landCategoryList", this.landCategoryList)
-          this.loadCategoryChart();
-        }
-      }, error => {
-        console.log(error);
-      });
-  }
-
-  totalLand = 5000; // acre
-
-  loadCategoryChart() {
-
-    const filteredList = this.landCategoryList.filter(x => x.id !== '');
-
-    const labels = filteredList.map(item => item.text);
-    const data = filteredList.map(item => item.quantity || 0);
-
-    const backgroundColors = this.generateColors(filteredList.length);
-
-    new Chart('categoryChart', {
-      type: 'pie',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: backgroundColors
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }
-    });
-  }
-
-  generateColors(count: number): string[] {
-    const colors: string[] = [];
-
-    for (let i = 0; i < count; i++) {
-      colors.push(
-        `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
-      );
-    }
-
-    return colors;
-  }
-
-
-
-  loadDocumentProgressChart() {
-    new Chart('documentChart', {
-      type: 'doughnut',
-      data: {
-        labels: [
-          'Agriculture (20%)',
-          'Economic Zone (10%)',
-          'Other (20%)',
-          'No Document (40%)'
-        ],
-        datasets: [{
-          data: [20, 10, 20, 40],
-          backgroundColor: [
-            '#4CAF50',
-            '#03A9F4',
-            '#FFC107',
-            '#f10808'
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        cutoutPercentage: 60,
-        legend: {
-          position: 'bottom'
-        }
-      }
-    });
-  }
-
-
-  mutationData = [
-    { type: 'Agriculture', quantity: 200 },
-    { type: 'Economic Zone', quantity: 100 },
-    { type: 'Residential', quantity: 150 },
-    { type: 'Industrial', quantity: 90 },
-    { type: 'Commercial', quantity: 120 },
-    { type: 'Forest', quantity: 80 },
-    { type: 'Water Body', quantity: 60 }
-  ];
-
-  loadMutationChart() {
-    new Chart('mutationChart', {
-      type: 'bar',
-      data: {
-        labels: this.mutationData.map(m => m.type),
-        datasets: [{
-          label: 'Land (Acre)',
-          data: this.mutationData.map(m => m.quantity),
-          backgroundColor: '#42A5F5'
-        }]
-      },
-      options: {
-        responsive: true,
-        legend: { display: false },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            },
-            scaleLabel: {
-              display: true,
-              labelString: 'Acre'
-            }
-          }],
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Mutation Type'
-            }
-          }]
-        }
-      }
-    });
-  }
-
-
-  //========================>>>>>>>>>>>===============END HERE ================================================
-
-
-
-  public _getcAreaWiseLand: string = 'case/getdashbordbyarea';
+  //public _getcAreaWiseLand: string = 'case/getdashbordbyarea';
+  public _getcAreaWiseLand: string = 'landdashboard/getdeeddashbordbyarea';
   getareaWiseList() {
     debugger;
     var userId = '';
@@ -426,7 +103,6 @@ export class UserDashboardComponent implements OnInit {
         const caseList = JSON.parse(this.res.resdata.caseList);
         const dashboard = JSON.parse(caseList[0].DASHBOARD_JSON);
         this.landData = this.mapLandHierarchy(dashboard.landHierarchy);;
-        console.log("this is low oe", this.landData)
 
       }, error => {
         console.log(error);
@@ -437,14 +113,7 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-  hovered: any = null;
+  
   private mapLandHierarchy(data: any[], level: string = 'district'): any[] {
     return data.map(item => {
       return {
@@ -481,14 +150,6 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
   public landByCatagory: any;
   public landByProject: any;
   public totalLands: any;
@@ -497,7 +158,8 @@ export class UserDashboardComponent implements OnInit {
   public totalKhajna: any;
   public totalMutation: any;
   public dashboards:any;
-  public _getDeedDash: string = 'case/getdeeddashbord';
+  public KhajnaByFinancialYear:any;
+  public _getDeedDash: string = 'landdashboard/getdeeddashbord';
   getDeedDashbord() {
     debugger;
     var userId = '';
@@ -512,13 +174,17 @@ export class UserDashboardComponent implements OnInit {
         this.landByProject=dashboard.landByProject;
         this.landByCatagory=dashboard.landByCatagory;
         this.totalLands=this._conversion.convertAjutansha(dashboard.totalLand.ttlland); 
-        console.log("this.totalLands",this.totalLands)
         this.totalMortgageLand=this._conversion.convertAjutansha(dashboard.totalLand.mortgageLand); 
-        this.unRegisterLand=dashboard.totalLand.unRegisterLand; 
+        this.unRegisterLand=this._conversion.convertAjutansha(dashboard.totalLand.unRegisterLand); 
         this.totalKhajna=dashboard.totalKhajna;
+        this.KhajnaByFinancialYear=dashboard.totalKhajnaByFinancialYear;
         this.totalMutation=dashboard.totalMutation;
         console.log("this is low dashboard", dashboard)
         this.loadLandByProjectChart();
+        this.loadLandByCatagoryChart();
+        this.loadCasePriorityChart()
+        this.loadMutationChart();
+        this.khajnaByFinancialYear()
 
       }, error => {
         console.log(error);
@@ -527,48 +193,12 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-  // loadLandByProjectChart() {
-  //   debugger
-
-  //   if (!this.landByProject?.length) return;
-
-  //   const canvas = document.getElementById('projectChart') as HTMLCanvasElement;
-  //   console.log("total candvas sis ",canvas)
-
-  //   if (!canvas) return;
-
-  //   new Chart(canvas, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: this.landByProject.map(x => x.name),
-  //       datasets: [
-  //         {
-  //           label: 'Total Land',
-  //           data: this.landByProject.map(x => x.toalLand),
-  //           backgroundColor: '#42A5F5'
-  //         }
-  //       ]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       legend: { display: false }
-  //     }
-  //   });
-  // }
-
-
-
-
   
 
   loadLandByProjectChart() {
     debugger
-
     if (!this.landByProject?.length) return;
-
     const canvas = document.getElementById('projectChart') as HTMLCanvasElement;
-    console.log("total candvas sis ",canvas)
-
     if (!canvas) return;
 
    new Chart(canvas, {
@@ -611,6 +241,92 @@ export class UserDashboardComponent implements OnInit {
 
 
 
+ loadLandByCatagoryChart() {
+    debugger
+
+    if (!this.landByCatagory?.length) return;
+
+    const canvas = document.getElementById('catagoryChart') as HTMLCanvasElement;
+
+    if (!canvas) return;
+
+   new Chart(canvas, {
+  type: 'bar',
+  data: {
+    labels: this.landByCatagory.map(x => x.name),
+    datasets: [
+      {
+        label: 'জমি',
+        data: this.landByCatagory.map(x => {
+          const land = this._conversion.convertAjutansha(x.toalLand);
+          return land.maxValue;
+        }),
+        backgroundColor: '#4CAF50'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    legend: {
+      display: false
+    },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data) => {
+
+          const project = this.landByCatagory[tooltipItem.index!];
+          const land = this._conversion.convertAjutansha(project.toalLand);
+
+          return [
+            `জমি: ${land.maxValue} ${land.maxUnit}`,
+            `দলিল: ${project.totalDeed}`
+          ];
+        }
+      }
+    }
+  }
+});
+  }
+
+
+
+
+  
+  loadCasePriorityChart() {
+
+    if (!this.totalKhajna || this.totalKhajna.length === 0) {
+      return;
+    }
+
+    new Chart('khajnaChart', {
+      type: 'doughnut',
+      data: {
+        labels: this.totalKhajna.map(x => `${x.khajnaStatus =='1'?'পরিশোধিত':'বকেয়া'} `),
+        datasets: [
+          {
+            data: this.totalKhajna.map(x => x.totalCount
+),
+            backgroundColor: [
+              '#4CAF50',
+               '#f10808',
+              '#03A9F4',
+              '#FFC107',
+              '#9C27B0',
+              '#FF5722'
+            ]
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        cutoutPercentage: 60,
+        legend: {
+          position: 'bottom'
+        }
+      }
+      
+    });
+  }
 
 
 
@@ -619,13 +335,123 @@ export class UserDashboardComponent implements OnInit {
 
 
 
+  public mutationArData: any;
+
+loadMutationChart() {
+
+  this.mutationArData = [
+    {
+      name: 'mutation',
+      Deed: this.totalMutation.mutationdeed,
+      land: this.totalMutation.mutationLand
+    },
+    {
+      name: 'unMutation',
+      Deed: this.totalMutation.unMutationDeed,
+      land: this.totalMutation.unMutationLand
+    }
+  ];
+
+  // Convert land data
+  const chartData = this.mutationArData.map(x => {
+    const landInfo = this._conversion.convertAjutansha(x.land);
+
+    return {
+      ...x,
+      maxValue: landInfo.maxValue,
+      maxUnit: landInfo.maxUnit
+    };
+  });
+
+  console.log("chartData", chartData);
+
+  if (!chartData || chartData.length === 0) {
+    return;
+  }
+
+  new Chart('mutationChart', {
+    type: 'pie',
+    data: {
+      labels: chartData.map(x =>
+        x.name === 'mutation' ? 'নামজারি হয়েছে' : 'নামজারি হয় নাই'
+      ),
+      datasets: [
+        {
+          // Pie chart value
+          data: chartData.map(x => x.maxValue),
+
+          backgroundColor: [
+            '#4CAF50',
+            '#f10808'
+          ]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'bottom'
+      },
+      tooltips: {
+        callbacks: {
+          label: (tooltipItem: any, data: any) => {
+
+            const item = chartData[tooltipItem.index];
+
+            return [
+              `${item.name === 'mutation' ? 'নামজারি হয়েছে' : 'নামজারি হয় নাই'}`,
+              `জমি: ${item.maxValue} ${item.maxUnit}`,
+              `দলিল: ${item.Deed}`
+            ];
+          }
+        }
+      } 
+    }
+  });
+}
 
 
 
 
 
+  khajnaByFinancialYear() {
+    debugger
 
+    if (!this.KhajnaByFinancialYear?.length) return;
 
+    const canvas = document.getElementById('financialYearChart') as HTMLCanvasElement;
+    console.log("total candvas sis ",canvas)
+
+    if (!canvas) return;
+
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.KhajnaByFinancialYear.map(x => x.financialYear),
+        datasets: [
+          {
+            label: 'খাজনা',
+            data: this.KhajnaByFinancialYear.map(x => x.totalCount),
+            //backgroundColor: '#42A5F5'
+             backgroundColor: [
+          '#4CAF50', // Green
+          '#2196F3', // Blue
+          '#FF9800', // Orange
+          '#9C27B0', // Purple
+          '#F44336', // Red
+          '#009688', // Teal
+          '#795548', // Brown
+          '#607D8B'  // Blue Grey
+        ]
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: { display: false }
+      }
+    });
+  }
 
 
 
